@@ -1,7 +1,7 @@
 <!-- app/views/home/index.html.erb -->
 
 <% if user_signed_in? %>
-  <%= render 'dashboard/show', current_user %>
+  <%= render 'projects/index', current_user %>
 <% else %>
   <div class="container">
     <%= image_tag 'logoIcon.png' %>

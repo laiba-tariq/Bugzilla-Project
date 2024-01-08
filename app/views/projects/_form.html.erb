@@ -1,0 +1,9 @@
+<%= render "devise/shared/error_messages", resource: @project %>
+<%= form_for @project do |f|%>
+  <%=f.label :name , class: 'col-md-12'%>
+  <%=f.text_field :project_name , class:'col-md-12' ,required: 'true' %>
+  <%=f.label :description , class: 'col-md-12' %>
+  <%=f.text_area :project_description , class:'col-md-12' %>
+  <%= f.submit  class:'btn btn-primary'%>
+<%end%>
+<%= link_to 'Back', projects_path, class: 'btn btn-secondary' %>

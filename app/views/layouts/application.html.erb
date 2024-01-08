@@ -10,10 +10,12 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-info">
-    <p class = "notice" ><%= notice %> </p>
-<p class = "alert" ><%= alert %></p>
-
+  <body class="bg-light">
+<%= turbo_frame_tag "modal" %>
     <%= yield %>
+    <div>
+    <p class = "notice" ><%= notice %> </p>
+    <p class = "alert" ><%= alert %></p>
+   </div>
   </body>
 </html>

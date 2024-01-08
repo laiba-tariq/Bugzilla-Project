@@ -5,7 +5,10 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: { registrations: 'users/registrations' }
 
-  get 'dashboard', to: 'dashboard#show', as: 'dashboard'
+  resources :projects do
+    get :add_user, on: :member
+    get :remove_user, on: :member
+  end
 
   # root to: 'devise/registrations#new'
 
