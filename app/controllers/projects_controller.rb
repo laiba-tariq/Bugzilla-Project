@@ -32,17 +32,13 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   def update  # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @project = Project.find(params[:id])
 
-    selected_user_ids = project_params[:id].reject(&:empty?)
 
     if params[:commit] == 'Add User'
-      # Add the selected users to the project
+      selected_user_ids = project_params[:id].reject(&:empty?)
       @project.users << User.where(id: selected_user_ids)
     elsif params[:commit] == 'Remove User'
-      # Remove the selected users from the project
+      selected_user_ids = project_params[:id].reject(&:empty?)
       @project.users.delete(User.where(id: selected_user_ids))
-    else
-      redirect_to projects_path, notice: 'Invalid operation.'
-      return
     end
 
     if @project.update(project_params.except(:id))
