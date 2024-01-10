@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   resources :projects do
     get :add_user, on: :member
     get :remove_user, on: :member
+
   end
+  get '/qa_projects', to: 'projects#qa_projects', as: :qa_projects
 
   # root to: 'devise/registrations#new'
 

@@ -48,6 +48,15 @@
   </div>
   <% end %>
 
+<% if current_user.usertype.downcase == 'qa' %>
+
+  <div class="row">
+    <div class="col-lg-4 col-form-label">
+      <%= link_to "View My Projects", qa_projects_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+  <% end %>
+
 </div>
 <!-- Navbar -->
 <div class="container-fluid ">
@@ -61,13 +70,14 @@
       <th>ID</th>
       <th>Name</th>
       <th>Description</th>
-              <%if current_user.usertype.downcase=='manager'%>
-
+      <%if current_user.usertype.downcase=='manager'%>
       <th>Add/Remove</th>
       <th>Edit/Delete</th>
      <th>View</th>
      <%end%>
-
+     <%if current_user.usertype.downcase=='qa'%>
+      <th>Actions</th>
+     <%end%>
     </tr>
   </thead>
   <tbody>
@@ -78,19 +88,26 @@
         <td><%= project.project_description %></td>
         <%if current_user.usertype.downcase=='manager'%>
         <td>
-           <%= link_to "Add User", add_user_project_path(project.id), method: :patch ,class: 'btn btn-info btn-sm' %>
-           <%= link_to "Remove User", remove_user_project_path(project.id), method: :patch ,class: 'btn btn-danger btn-sm' %>
+           <%= link_to "Add User", add_user_project_path(project.id),class: 'btn btn-info btn-sm' %>
+           <%= link_to "Remove User", remove_user_project_path(project.id),class: 'btn btn-danger btn-sm' %>
         </td>
         <td>
           <%= link_to 'Edit Project', edit_project_path(project), class: 'btn btn-success btn-sm',data: { turbo_frame: 'modal' }  %>
            <%= button_to "Delete",
                   project_path(project),
                   method: :delete,
-                  class: "btn btn-danger btn-sm" %>        </td>
+                  class: "btn btn-danger btn-sm" %>
+        </td>
          <td>
            <%= link_to "View Project" , project_path(project.id) ,class: 'btn btn-primary btn-sm' %>
         </td>
         <%end%>
+        <%if current_user.usertype.downcase=='qa'%>
+        <td>
+          <%= link_to "Report a bug", root_path(project.id) ,class: 'btn btn-primary btn-sm' %>
+
+        <%end%>
+
       </tr>
     <% end %>
   </tbody>

@@ -1,6 +1,6 @@
-<% if item.errors.any? %>
+<% if @project.errors.any? %>
   <div class="alert alert-danger">
-    <%= item.errors.full_messages.to_sentence %>
+    <%= @project.errors.full_messages.to_sentence %>
   </div>
 <% end %>
 
