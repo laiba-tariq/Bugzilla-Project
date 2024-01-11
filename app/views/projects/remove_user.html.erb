@@ -1,3 +1,4 @@
+  <%= turbo_frame_tag "project" do %>
 <%= render "devise/shared/error_messages", resource: @project %>
 <div class="container-fluid">
 <%= form_for @project do |f|%>
@@ -11,6 +12,14 @@
     <%= f.label :QA_ids, class: 'col-md-12' %>
     <%= f.collection_select :id, @qas, :id, :username, { include_blank: 'Select QA' }, { multiple: true, class: 'col-md-12' } %>
   </div>
-  <%= f.submit 'Remove User', name: 'commit' %>
+  <%= f.submit 'Remove User', name: 'commit' ,class: 'btn btn-info'%>
+      <%= link_to 'Cancel', projects_path, class: 'btn btn-danger' %>
+
+
 <%end%>
+<h2>Already Added Users</h2>
+    <% @project.users.each do |user| %>
+      <p><%= user.username %></p>
+    <% end %>
 </div>
+<%end%>

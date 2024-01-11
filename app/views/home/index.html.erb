@@ -1,9 +1,8 @@
-<!-- app/views/home/index.html.erb -->
 
 <% if user_signed_in? %>
   <%= render 'projects/index', current_user %>
 <% else %>
-  <div class="container">
+  <div class="container-fluid">
     <%= image_tag 'logoIcon.png' %>
     <h2 class="text-center text-dark
     ">Track and manage bugs effortlessly with Bugzilla.</h2>

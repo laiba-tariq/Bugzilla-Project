@@ -6,12 +6,11 @@
 
 <%= render "devise/shared/error_messages", resource: @project %>
 <%= form_for @project do |f|%>
-  <%=f.label :project_name , class: 'col-md-12'%>
+  <%=f.label :name , class: 'col-md-12'%>
   <%=f.text_field :project_name , class:'col-md-12' ,required: 'true' %>
-  <%=f.label :project_description , class: 'col-md-12' %>
+  <%=f.label :description , class: 'col-md-12' %>
   <%=f.text_area :project_description , class:'col-md-12' %>
-  <div class="flex space-x-3 items-center justify-between">
-    <%= f.submit class: "btn btn-primary" %>
-    <%= link_to "Cancel", projects_path, class: "btn btn-danger", data: { turbo: false } %>
-  </div>
+  <%= f.submit  class:'btn btn-primary'%>
+  <%= link_to 'Cancel', projects_path, class: 'btn btn-danger' %>
+
 <%end%>

@@ -14,13 +14,13 @@
  *= require_self
  */
  @import "bootstrap";
- #modal {
-  position: absolute;
-  z-index: 2;
-  right: 10px;
-  top: 10px;
-  width: 400px;
-  word-break: break-word;
-  border-radius: 6px;
-  background: #bad5ff;
+ #projectModalFrame {
+  display: none; /* initially hide the modal */
+}
+
+#projectModal {
+border: 1px solid black;}
+
+.hidden {
+  display: none !important;
 }

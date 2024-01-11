@@ -1,3 +1,4 @@
+<%= turbo_frame_tag "project" do %>
 <h1>My Projects</h1>
 <hr>
 <% if @qa_projects.present? %>
@@ -8,3 +9,4 @@
 <% else %>
   <p>No projects found.</p>
 <% end %>
+<%end%>

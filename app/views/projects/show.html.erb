@@ -1,9 +1,10 @@
+  <%= turbo_frame_tag "project" do %>
 <h1>Projects Info</h1>
 <h2>  <%= @project.project_name%></h2>
 <h4><%= @project.project_description%></h4>
 <h4>No of Developers: <%= @project.users.developer.count %></h4>
 <h4>No of QA: <%=@project.users.qa.count%></h4>
-
-
+<%= link_to 'Close', projects_path,class:"btn btn-danger" %>
+<%end%>
 
 
