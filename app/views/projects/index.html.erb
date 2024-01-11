@@ -23,7 +23,7 @@
       <!-- Left links -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item mt-4">
-          <H1><%=current_user.usertype%>'s Dashboard</H1>
+          <H1><%=current_user.user_type%>'s Dashboard</H1>
         </li>
       </ul>
       <!-- Left links -->
@@ -38,17 +38,16 @@
   </div>
 
 </nav>
-<% if current_user.usertype.downcase == 'manager' %>
+<% if current_user.user_type.to_sym == :manager %>
 
   <div class="row">
     <div class="col-lg-4 col-form-label">
-
-      <%= link_to "Create New Project", new_project_path, class: "btn btn-primary", data: { turbo_frame: 'new_project' } %>
+    <%= link_to "Create New Project", new_project_path, class: "btn btn-primary", data: { turbo_frame: 'new_project' } %>
     </div>
   </div>
   <% end %>
 
-<% if current_user.usertype.downcase == 'qa' %>
+<% if current_user.user_type.to_sym == :qa %>
 
   <div class="row">
     <div class="col-lg-4 col-form-label">
@@ -70,12 +69,12 @@
       <th>ID</th>
       <th>Name</th>
       <th>Description</th>
-      <%if current_user.usertype.downcase=='manager'%>
+      <%if current_user.user_type.to_sym == :manager%>
       <th>Add/Remove</th>
       <th>Edit/Delete</th>
      <th>View</th>
      <%end%>
-     <%if current_user.usertype.downcase=='qa'%>
+     <%if current_user.user_type.to_sym == :qa%>
       <th>Actions</th>
      <%end%>
     </tr>
@@ -86,7 +85,7 @@
         <td><%= project.id %></td>
         <td><%= project.project_name %></td>
         <td><%= project.project_description %></td>
-        <%if current_user.usertype.downcase=='manager'%>
+        <%if current_user.user_type.to_sym == :manager%>
         <td>
            <%= link_to "Add User", add_user_project_path(project.id),class: 'btn btn-info btn-sm' %>
            <%= link_to "Remove User", remove_user_project_path(project.id),class: 'btn btn-danger btn-sm' %>
@@ -96,18 +95,16 @@
            <%= button_to "Delete",
                   project_path(project),
                   method: :delete,
-                  class: "btn btn-danger btn-sm" %>
+                  class: "btn btn-danger btn-sm", data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
         </td>
          <td>
            <%= link_to "View Project" , project_path(project.id) ,class: 'btn btn-primary btn-sm' %>
         </td>
         <%end%>
-        <%if current_user.usertype.downcase=='qa'%>
+        <%if current_user.user_type.to_sym == :qa%>
         <td>
           <%= link_to "Report a bug", root_path(project.id) ,class: 'btn btn-primary btn-sm' %>
-
         <%end%>
-
       </tr>
     <% end %>
   </tbody>

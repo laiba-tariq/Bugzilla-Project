@@ -1,8 +1,8 @@
 <h1>Projects Info</h1>
 <h2>  <%= @project.project_name%></h2>
 <h4><%= @project.project_description%></h4>
-<h4>No of Developers: <%=@project.users.where('LOWER(usertype) = ?', 'developer'.downcase).count%></h4>
-<h4>No of QA: <%=@project.users.where('LOWER(usertype) = ?', 'qa'.downcase).count%></h4>
+<h4>No of Developers: <%= @project.users.developer.count %></h4>
+<h4>No of QA: <%=@project.users.qa.count%></h4>
 
 
 

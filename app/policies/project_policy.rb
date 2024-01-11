@@ -13,7 +13,7 @@ class ProjectPolicy < ApplicationPolicy # rubocop:disable Style/Documentation
   end
 
   def create?
-    @user.usertype.downcase == "manager"
+    @user.user_type.to_sym == :manager
   end
 
   def show?
@@ -38,12 +38,12 @@ class ProjectPolicy < ApplicationPolicy # rubocop:disable Style/Documentation
 
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
-      case @user.usertype.downcase
-      when "manager"
+      case @user.user_type.to_sym
+      when :manager
         scope.where(created_by: @user.id)
-      when "qa"
+      when :qa
         scope.all
-      when "developer"
+      when :developer
         @user.projects
       else
         scope.none

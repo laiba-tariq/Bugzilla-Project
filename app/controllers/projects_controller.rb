@@ -6,6 +6,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
 
   def index
     @projects = policy_scope(Project)
+    puts @projects
   end
 
   def show
@@ -21,9 +22,8 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     authorize @project
 
     @project.created_by = current_user.id
-    puts @project.project_name
     if @project.save
-      redirect_to projects_path, notice: 'Project was successfully created.'
+      redirect_to projects_path, notice: "Project was successfully created."
     else
       render :new
     end
@@ -33,15 +33,16 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     @project = Project.find(params[:id])
   end
 
-  def update  # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @project = Project.find(params[:id])
-    if params[:commit] == 'Add User'
+    if params[:commit] == "Add User"
       selected_user_ids = project_params[:id].reject(&:empty?)
       @project.users << User.where(id: selected_user_ids)
     elsif params[:commit] == 'Remove User'
       selected_user_ids = project_params[:id].reject(&:empty?)
       @project.users.delete(User.where(id: selected_user_ids))
     end
+
     if @project.update(project_params.except(:id))
       redirect_to projects_path, notice: 'Project was successfully updated.'
     else
@@ -55,19 +56,19 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   end
 
   def add_user
-    @developers = User.where('LOWER(usertype) = ?', 'developer'.downcase)
-    @qas = User.where('LOWER(usertype) = ?', 'QA'.downcase)
+    @developers = User.where(user_type: User.user_types[:developer])
+    @qas = User.where(user_type: User.user_types[:qa])
   end
 
   def remove_user
-    @developers = @project.users.where('LOWER(usertype) = ?', 'developer'.downcase)
-    @qas = @project.users.where('LOWER(usertype) = ?', 'QA'.downcase)
+    @developers = User.where(user_type: User.user_types[:developer])
+    @qas = User.where(user_type: User.user_types[:qa])
   end
 
   def qa_projects
     user_id = current_user.id
     @qa_projects = Project.where(id: UserProject.where(user_id: user_id).pluck(:project_id))
-    render 'qa_projects'
+    render "qa_projects"
   end
 
   private

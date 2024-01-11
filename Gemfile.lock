@@ -323,12 +323,13 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
-  bootstrap
+  bootstrap (~> 5.3.2)
   capybara
   debug
   devise
   importmap-rails
   jbuilder
+  popper_js (~> 2.11.6)
   puma (>= 5.0)
   pundit
   rails (~> 7.1.2)
