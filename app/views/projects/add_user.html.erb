@@ -1,3 +1,5 @@
+
+<% if user_signed_in? %>
 <% if flash[:alert] %>
   <div class="alert alert-warning">
     <%= flash[:alert] %>
@@ -29,3 +31,6 @@
     <% end %>
 </div>
 <%end%>
+<% else %>
+<%= render 'page_not_found' %>
+<% end %>

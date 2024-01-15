@@ -1,4 +1,5 @@
 <!-- app/views/home/index.html.erb -->
+<% if user_signed_in? %>
 <nav class="navbar navbar-expand-lg bg-info">
   <!-- Container wrapper -->
   <div class="container-fluid">
@@ -61,3 +62,6 @@
     <%= render 'project', local: {project:@projects }%>
   <% end %>
 </div>
+<% else %>
+<%= render 'page_not_found' %>
+<% end %>

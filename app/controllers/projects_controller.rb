@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ProjectsController < ApplicationController # rubocop:disable Style/Documentation
+  before_action :authenticate_user!
   before_action :set_project, only: %i[edit update destroy add_user remove_user]
   before_action :authorize_project, except: %i[index create qa_projects]
 
@@ -74,11 +75,11 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     render 'qa_projects'
   end
 
-
   private
 
   def set_project
     @project = Project.find(params[:id])
+    authorize_project
   end
 
   def project_params

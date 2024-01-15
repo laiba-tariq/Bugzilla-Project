@@ -1,4 +1,4 @@
-<%= turbo_frame_tag 'second_frame' do%>
+ <%#= turbo_frame_tag 'project' do%>
 <section style="background-color: #eee;">
   <div class="container py-5">
     <div class="row justify-content-center mb-3">
@@ -42,33 +42,23 @@
                  <%= bug.description %>
                 </p>
               </div>
-              <% if current_user.qa? %>
-                <div class="d-flex flex-column mt-4">
-                  <%= turbo_frame_tag "project" do %>
-                    <%= link_to 'Edit Status', edit_project_bug_url(bug.project_id, bug.id), class: 'btn btn-success btn-sm', data: { turbo_frame: 'project' } %>
+              <%if current_user.developer? && !bug.assigned_to? %>
+              <div class="d-flex flex-column mt-4">
+              <%= form_with model: @bug, url: assign_to_dev_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
+              <%= form.submit 'Assign to Myself', class: 'btn btn-primary btn-sm' %>
+            <% end %>
+            </div>
+            <% elsif current_user.developer? && bug.assigned_to == current_user.id  %>
+                <% if bug.bug_status=="New" %>
+                  <%= form_with model: @bug, url: start_working_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
+                    <%= form.submit 'Start Work', class: 'btn btn-warning btn-sm' %>
                   <% end %>
-                </div>
-           <% elsif current_user.developer? && !bug.assigned_to? %>
-  <div class="d-flex flex-column mt-4">
-   <%= form_with model: @bug, url: assign_to_dev_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
-  <%= form.label :assigned_to %>
-  <%= form.submit 'Assign to Myself', class: 'btn btn-primary btn-sm' %>
-<% end %>
-  </div>
-            <% elsif current_user.developer? && !bug.assigned_to? %>
-                <%= form_with model: @bug, url: start_working_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
-                  <%= form.radio_button :bug_status, 'Started' %>
-                  <%= form.label :start_work %>
-                  <%= form.submit 'Start Work', class: 'btn btn-warning btn-sm' %>
-                <% end %>
+                <%end %>
                 <%= form_with model: @bug, url: mark_complete_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
-                  <%= form.radio_button :bug_status, 'Completed' %>
-                  <%= form.label :mark_complete %>
                   <%= form.submit 'Mark as Complete', class: 'btn btn-success btn-sm' %>
                 <% end %>
               </div>
             <% end %>
-
             </div>
           </div>
         </div>
@@ -76,4 +66,5 @@
     </div>
   </div>
 </section>
-<% end %>
+<%# end %>
+

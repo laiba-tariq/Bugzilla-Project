@@ -12,7 +12,7 @@ class BugPolicy < ApplicationPolicy
   end
 
   def edit?
-    user.developer? # Or whatever condition is required for editing bugs
+    user.developer?
   end
 
   def assign_to_dev?
@@ -20,12 +20,17 @@ class BugPolicy < ApplicationPolicy
   end
 
   def start_working?
-    @user.id == @record.assigned_to
+    user.developer? && record.assigned_to.present? && record.assigned_to == user.id
   end
 
   def mark_complete?
     start_working?
   end
+
+  def assigned_bugs
+    user.developer?
+  end
+
 
   class Scope < Scope
     def resolve

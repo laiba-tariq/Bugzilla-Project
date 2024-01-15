@@ -1,79 +1,114 @@
-<%if @projects%>
-<table class="table">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Description</th>
-      <%if current_user.user_type.to_sym == :manager%>
-      <th>Add/Remove</th>
-      <th>Edit/Delete</th>
-     <th>View</th>
-     <%end%>
-     <%if current_user.user_type.to_sym == :qa%>
-      <th>Actions</th>
-      <th>Bug count</th>
-      <th>Feature count</th>
-     <%end%>
-    </tr>
-  </thead>
-  <tbody>
-    <% @projects.each do |project| %>
+<% if @projects.present? %>
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= project.id %></td>
-        <td><%= project.project_name %></td>
-        <td><%= project.project_description %></td>
-        <%if current_user.user_type.to_sym == :manager%>
-        <td>
-           <%= turbo_frame_tag "project" do %>
-           <%= link_to "Add User", add_user_project_path(project.id),class: 'btn btn-info btn-sm' , data: { turbo_frame: 'project' } %><%end%>
-           <%= turbo_frame_tag "project" do %>
-           <%= link_to "Remove User", remove_user_project_path(project.id),class: 'btn btn-danger btn-sm', data: { turbo_frame: 'project' } %>
-           <%end%>
-        </td>
-        <td>
-        <%= turbo_frame_tag "project" do %>
-          <%= link_to 'Edit Project', edit_project_path(project), class: 'btn btn-success btn-sm', data: { turbo_frame: 'project' }  %>
-          <%end%>
-           <%= button_to "Delete",
-                  project_path(project),
-                  method: :delete,
-                  class: "btn btn-danger btn-sm", data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
-        </td>
-         <td>
-          <%= turbo_frame_tag "project" do %>
-           <%= link_to "View Project" , project_path(project.id) ,class: 'btn btn-primary btn-sm' %>
-           <%end%>
-        </td>
-        <%end%>
-        <%if current_user.user_type.to_sym == :qa%>
-            <td>
-              <%= turbo_frame_tag "project" do %>
-                 <%= link_to "Report a bug/feature", new_project_bug_path(project.id) ,class: 'btn btn-primary btn-sm' ,data: { turbo_frame: 'project'}%>
-              <%end%>
-            </td>
-          <td>
-          <%= turbo_frame_tag "project" do %>
-               <%= project.bugs.where(bug_type: 'Bug').count %>
-          <% end %>
-          </td>
-          <td>
-            <%= turbo_frame_tag "project" do %>
-               <%= project.bugs.where(bug_type: 'Feature').count %>
-            <% end %>
-          </td>
-       <%end%>
-          <%if current_user.qa? || current_user.developer?%>
-            <td>
-              <%= turbo_frame_tag "project" do %>
-                  <%= link_to "View Bug/Feature", project_bugs_path(project.id) ,class: 'btn btn-primary btn-sm' ,data: { turbo_frame: 'project'}%>
-              <%end%>
-            </td>
-          <% end %>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <% if current_user.manager? %>
+          <th>Add/Remove</th>
+          <th>Edit/Delete</th>
+          <th>View</th>
+        <% end %>
+
+        <% if current_user.qa? %>
+          <th>Actions</th>
+          <th>Bug count</th>
+          <th>Feature count</th>
+        <% end %>
+
+        <% if current_user.developer? %>
+          <th>Actions</th>
+        <% end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-<%else%>
-<h1>No Projects</h1>
-<%end%>
+    </thead>
+
+    <tbody>
+      <% @projects.each do |project| %>
+        <tr>
+          <td><%= project.id %></td>
+          <td><%= project.project_name %></td>
+          <td><%= project.project_description %></td>
+
+          <% if current_user.manager? %>
+            <td>
+              <%= turbo_frame_tag "project" do %>
+                <%= link_to "Add User", add_user_project_path(project.id), class: 'btn btn-info btn-sm', data: { turbo_frame: 'project' } %>
+              <% end %>
+
+              <%= turbo_frame_tag "project" do %>
+                <%= link_to "Remove User", remove_user_project_path(project.id), class: 'btn btn-danger btn-sm', data: { turbo_frame: 'project' } %>
+              <% end %>
+            </td>
+
+            <td>
+              <%= turbo_frame_tag "project" do %>
+                <%= link_to 'Edit Project', edit_project_path(project), class: 'btn btn-success btn-sm', data: { turbo_frame: 'project' }  %>
+              <% end %>
+
+              <%= button_to "Delete", project_path(project), method: :delete, class: "btn btn-danger btn-sm", data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
+            </td>
+
+            <td>
+              <%= turbo_frame_tag "project" do %>
+                <%= link_to "View Project", project_path(project.id), class: 'btn btn-primary btn-sm' %>
+              <% end %>
+            </td>
+          <% end %>
+
+          <% if current_user.qa? %>
+            <td>
+              <%= turbo_frame_tag "project" do %>
+                <%= link_to "Report a bug/feature", new_project_bug_path(project.id), class: 'btn btn-primary btn-sm', data: { turbo_frame: 'project' } %>
+              <% end %>
+            </td>
+
+            <td>
+              <%= turbo_frame_tag "project" do %>
+                <%= project.bugs.where(bug_type: 'Bug').count %>
+              <% end %>
+            </td>
+
+            <td>
+              <%= turbo_frame_tag "project" do %>
+                <%= project.bugs.where(bug_type: 'Feature').count %>
+              <% end %>
+            </td>
+          <% end %>
+
+          <% if current_user.qa? || current_user.developer? %>
+            <td>
+              <%= turbo_frame_tag "project" do %>
+                <%= link_to "View Bug/Feature", project_bugs_path(project.id), class: 'btn btn-primary btn-sm', data: { turbo_frame: 'project' } %>
+              <% end %>
+            </td>
+
+            <td>
+              <% if current_user.developer? && !current_user.qa? %>
+                <td>
+                  <%= turbo_frame_tag "project" do %>
+                    <span>Assigned count: <%= project.bugs.where(project_id: project.id).where.not(assigned_to: nil).count %></span>
+                  <% end %>
+                </td>
+
+                <% assigned_bugs = project.bugs.where.not(assigned_to: nil) %>
+                <% assigned_bugs.each do |bug| %>
+                  <% puts "Bug ID: #{bug.id}, Title: #{bug.title}, Assigned To: #{bug.assigned_to}" %>
+                <% end %>
+
+                <td>
+                  <%= turbo_frame_tag "project" do %>
+                      <%= link_to "View Assigned", assigned_bugs_path(project_id:project.id, bug_ids: project.bugs.where.not(assigned_to: nil).pluck(:id)), class: 'btn btn-primary btn-sm', data: { turbo_frame: 'project' } %>
+                 <% end %>
+
+                </td>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <h1>No Projects</h1>
+<% end %>

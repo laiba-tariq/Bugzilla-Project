@@ -1,24 +1,27 @@
 # frozen_string_literal: true
 
 class BugsController < ApplicationController # rubocop:disable Style/Documentation
-  before_action :set_bug, only: %i[show edit update destroy assign_to_dev]
-  before_action :authorize_bug, except: [:index]
+  before_action :authenticate_user!
+  before_action :set_bug, only: %i[edit update destroy assign_to_dev start_working mark_complete]
+  before_action :authorize_bug, except: [:index ,:assigned_bugs]
+  before_action :set_bugs, only: [:show]
   # GET /projects/:project_id/bugs
   def index
-    @bugs = policy_scope(Bug)
+    # @bugs = policy_scope(Bug)
     @bugs = Bug.where(project_id: params[:project_id])
-    # authorize @bugs
+    authorize @bugs
   end
 
   # GET /projects/:project_id/bugs/1
   def show
+    @project_id = params[:project_id]
+    @bugs = Bug.where(id: params[:bug_ids])
     authorize @bugs
   end
 
   # GET /projects/:project_id/bugs/new
   def new
-    # @project = Project.find(params[:project_id])
-    @project = Bug.find(params[:project_id])
+    @project = Project.find(params[:project_id])
     @bug = Bug.new(bug_status: :New)
     @bug = @project.bugs.build
   end
@@ -26,10 +29,6 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
   # POST /projects/:project_id/bugs
   def create
     @bug = Bug.new(bug_params)
-    # @bug.creator_id = params[:created_by]
-    # @bug.project_id = params[:project_id]
-
-    # respond_to do |format|
     if @bug.save
       @projects = policy_scope(Project)
       render turbo_stream: [
@@ -37,10 +36,9 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
         turbo_stream.remove('project')
       ]
     else
-      format.html { render :new }
-      format.json { render json: @bug.errors, status: :unprocessable_entity } # Add this line for JSON format
+     format.html { render :new }
+     format.json { render json: @bug.errors, status: :unprocessable_entity } # Add this line for JSON format
     end
-    # end
   end
 
   # GET /projects/:project_id/bugs/1/edit
@@ -70,7 +68,42 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
         turbo_stream.replace('second_frame', template: 'bugs/index', locals: { bug: @bugs }),
         turbo_stream.remove('project')
       ]
+    else
+      redirect_to @bugs, notice: 'Not Assigned'
     end
+  end
+
+  def assigned_bugs
+    @bugs = Bug.where(id: params[:bug_ids], project_id: params[:project_id])    # # Fetch bugs based on project_id and bug_ids
+    # @bugs = Bug.where(id: bug_ids, project_id: project_id)
+    render 'assigned_bugs'
+  end
+
+  def start_working
+    authorize_bug
+    if @bug.update_attribute(:bug_status, "Started")
+      @bugs = Bug.where(project_id: params[:project_id])
+      render turbo_stream: [
+        turbo_stream.replace('second_frame', template: 'bugs/index', locals: { bug: @bugs }),
+        turbo_stream.remove('project')
+      ]
+    else
+      redirect_to @bugs, notice: 'Not Started'
+    end
+  end
+
+  def mark_complete # rubocop:disable Metrics/MethodLength
+    authorize_bug
+    if @bug.update_attribute(:bug_type, 'Feature')
+      @bug.update_attribute(:bug_status, 'Completed')
+    elsif @bug.update_attribute(:bug_type, 'Bug')
+      @bug.update_attribute(:bug_status, 'Resolved')
+    end
+    @bugs = Bug.where(project_id: params[:project_id])
+    render turbo_stream: [
+      turbo_stream.replace('second_frame', template: 'bugs/index', locals: { bug: @bugs }),
+      turbo_stream.remove('project')
+    ]
   end
 
   private
@@ -79,9 +112,10 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
     @bug = Bug.find(params[:id])
   end
 
+
   def bug_params
     params.require(:bug).permit(:title, :description, :screenshot, :deadline, :bug_type, :status, :assigned_to,
-                                :creater_id, :project_id)
+                                :creater_id, :project_id, :bugs)
   end
 
   def authorize_bug

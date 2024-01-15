@@ -17,7 +17,7 @@ class ProjectPolicy < ApplicationPolicy # rubocop:disable Style/Documentation
   end
 
   def show?
-    @project.created_by == @user.id if @project.present?
+    @user.present? && @project.present? && @project.created_by == @user.id
   end
 
   def update?
@@ -38,7 +38,7 @@ class ProjectPolicy < ApplicationPolicy # rubocop:disable Style/Documentation
 
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
-      case @user.user_type.to_sym
+      case @user&.user_type&.to_sym
       when :manager
         scope.where(created_by: @user.id)
       when :qa
