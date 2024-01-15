@@ -17,6 +17,8 @@
     <%= f.label :QA_ids, class: 'col-md-12' %>
     <%= f.collection_select :id, @qas, :id, :username, { include_blank: 'Select QA' }, { multiple: true, class: 'col-md-12' } %>
   </div>
+    <%= f.hidden_field :add_user_form, value: true %>
+
   <%= f.submit 'Add User', name: 'commit',class: 'btn btn-primary' %>
     <%= link_to 'Cancel', projects_path, class: 'btn btn-danger' %>
 

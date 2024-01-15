@@ -35,7 +35,7 @@
   </div>
 
 </nav>
-
+<%= turbo_frame_tag "project" %>
 <% if current_user.user_type.to_sym == :manager %>
   <%= turbo_frame_tag "first_turbo_frame" do %>
     <div class="row">
@@ -44,7 +44,7 @@
       </div>
     </div>
   <% end %>
-<% end %> <!-- Close the if block -->
+<% end %>
 
 <% if current_user.user_type.to_sym == :qa %>
   <%= turbo_frame_tag "first_turbo_frame" do %>
@@ -61,4 +61,3 @@
     <%= render 'project', local: {project:@projects }%>
   <% end %>
 </div>
-<%= turbo_frame_tag "project" %>

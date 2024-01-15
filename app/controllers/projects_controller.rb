@@ -22,7 +22,8 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     authorize @project
     @project.created_by = current_user.id
     if @project.save
-      redirect_to projects_path, notice: 'Project was successfully created.'
+      @projects = policy_scope(Project)
+      # update
     else
       render :new
     end
@@ -32,23 +33,21 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     @project = Project.find(params[:id])
   end
 
-  def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
     @project = Project.find(params[:id])
-    if params[:commit] == "Add User"
+    if params[:project][:add_user_form] == 'true'
       selected_user_ids = project_params[:id].reject(&:empty?).map(&:to_i)
       new_user_ids = selected_user_ids - @project.user_ids
       @project.users << User.where(id: new_user_ids)
-    elsif params[:commit] == 'Remove User'
+      @projects = policy_scope(Project)
+    elsif params[:project][:remove_user_form] == 'true'
       selected_user_ids = project_params[:id].reject(&:empty?)
       @project.users.delete(User.where(id: selected_user_ids))
     end
 
     if @project.update(project_params.except(:id))
       @projects = policy_scope(Project)
-      render turbo_stream: [
-        turbo_stream.replace('second_frame', partial: 'project', locals: { projects: @projects }),
-        turbo_stream.remove('project')
-      ]
+      update_page
     else
       render 'edit'
     end
@@ -72,8 +71,9 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   def qa_projects
     user_id = current_user.id
     @qa_projects = Project.where(id: UserProject.where(user_id: user_id).pluck(:project_id))
-    render "qa_projects"
+    render 'qa_projects'
   end
+
 
   private
 
@@ -87,5 +87,12 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
 
   def authorize_project
     authorize @project if @project.present?
+  end
+
+  def update_page
+    render turbo_stream: [
+      turbo_stream.replace('second_frame', partial: 'project', locals: { projects: @projects }),
+      turbo_stream.remove('project')
+    ]
   end
 end

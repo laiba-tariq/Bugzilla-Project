@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeReferenceUserProjects < ActiveRecord::Migration[7.1]
   def change
     remove_reference :user_projects, :users, foreign_key: true

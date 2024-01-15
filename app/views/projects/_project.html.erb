@@ -12,6 +12,8 @@
      <%end%>
      <%if current_user.user_type.to_sym == :qa%>
       <th>Actions</th>
+      <th>Bug count</th>
+      <th>Feature count</th>
      <%end%>
     </tr>
   </thead>
@@ -45,9 +47,29 @@
         </td>
         <%end%>
         <%if current_user.user_type.to_sym == :qa%>
-        <td>
-          <%= link_to "Report a bug", root_path(project.id) ,class: 'btn btn-primary btn-sm' %>
-        <%end%>
+            <td>
+              <%= turbo_frame_tag "project" do %>
+                 <%= link_to "Report a bug/feature", new_project_bug_path(project.id) ,class: 'btn btn-primary btn-sm' ,data: { turbo_frame: 'project'}%>
+              <%end%>
+            </td>
+          <td>
+          <%= turbo_frame_tag "project" do %>
+               <%= project.bugs.where(bug_type: 'Bug').count %>
+          <% end %>
+          </td>
+          <td>
+            <%= turbo_frame_tag "project" do %>
+               <%= project.bugs.where(bug_type: 'Feature').count %>
+            <% end %>
+          </td>
+       <%end%>
+          <%if current_user.qa? || current_user.developer?%>
+            <td>
+              <%= turbo_frame_tag "project" do %>
+                  <%= link_to "View Bug/Feature", project_bugs_path(project.id) ,class: 'btn btn-primary btn-sm' ,data: { turbo_frame: 'project'}%>
+              <%end%>
+            </td>
+          <% end %>
       </tr>
     <% end %>
   </tbody>

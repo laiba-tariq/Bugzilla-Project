@@ -1,0 +1,79 @@
+<%= turbo_frame_tag 'second_frame' do%>
+<section style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row justify-content-center mb-3">
+      <div class="col-md-12 col-xl-10">
+        <div class="card shadow-0 border rounded-3">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                  <% if bug.screenshot.attached? %>
+                    <%= image_tag bug.screenshot, class: "img-fluid" %>
+                  <% else %>
+                    No image attached
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6 col-xl-6">
+                <h5><%= bug.title %></h5>
+                <div class="d-flex flex-row">
+                  <span class="fw-bold">Project Id:</span>
+                  <%= bug.project_id %>
+                </div>
+                <div class="d-flex flex-row">
+                  <span class="fw-bold">Type:</span>
+                  <%= bug.bug_type %>
+                </div>
+                <div class="d-flex flex-row">
+                  <span class="fw-bold">Status:</span>
+                  <%= bug.bug_status %>
+                </div>
+                <div class="d-flex flex-row">
+                  <span class="fw-bold">Deadline:</span>
+                  <%= bug.deadline %>
+                </div>
+                 <div class="d-flex flex-row">
+                  <span class="fw-bold"> Assigned To:</span>
+                  <%= bug.assigned_to %>
+                </div>
+                <p class="text-truncate mb-4 mb-md-0">
+                 <span class="fw-bold">Description:</span>
+                 <%= bug.description %>
+                </p>
+              </div>
+              <% if current_user.qa? %>
+                <div class="d-flex flex-column mt-4">
+                  <%= turbo_frame_tag "project" do %>
+                    <%= link_to 'Edit Status', edit_project_bug_url(bug.project_id, bug.id), class: 'btn btn-success btn-sm', data: { turbo_frame: 'project' } %>
+                  <% end %>
+                </div>
+           <% elsif current_user.developer? && !bug.assigned_to? %>
+  <div class="d-flex flex-column mt-4">
+   <%= form_with model: @bug, url: assign_to_dev_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
+  <%= form.label :assigned_to %>
+  <%= form.submit 'Assign to Myself', class: 'btn btn-primary btn-sm' %>
+<% end %>
+  </div>
+            <% elsif current_user.developer? && !bug.assigned_to? %>
+                <%= form_with model: @bug, url: start_working_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
+                  <%= form.radio_button :bug_status, 'Started' %>
+                  <%= form.label :start_work %>
+                  <%= form.submit 'Start Work', class: 'btn btn-warning btn-sm' %>
+                <% end %>
+                <%= form_with model: @bug, url: mark_complete_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
+                  <%= form.radio_button :bug_status, 'Completed' %>
+                  <%= form.label :mark_complete %>
+                  <%= form.submit 'Mark as Complete', class: 'btn btn-success btn-sm' %>
+                <% end %>
+              </div>
+            <% end %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<% end %>

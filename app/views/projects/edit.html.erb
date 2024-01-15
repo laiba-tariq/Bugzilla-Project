@@ -1,7 +1,9 @@
 <%= turbo_frame_tag "project" do %>
-<div class="container">
-		<h1>Edit project</h1>
-		<%= render'form'%>
-</div>
+    <h1 class="h3 modal-header">
+      Edit Project
+    </h1>
+	<div class="modal-body">
+      <%= render "form", project: @project %>
+    </div>
+	</div>
 <%end%>
-

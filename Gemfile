@@ -34,6 +34,7 @@ gem 'popper_js', '~> 2.11.6'
 
 gem 'sassc-rails'
 
+gem 'activestorage'
 gem 'devise'
 gem 'pundit'
 # Use Redis adapter to run Action Cable in production

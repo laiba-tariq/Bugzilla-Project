@@ -1,0 +1,14 @@
+<%=turbo_frame_tag "project" do%>
+<p style="color: green"><%= notice %></p>
+
+<h1>Bugs</h1>
+    <div class="text-end mt-3">
+      <%= link_to 'Close', projects_path, class: "btn btn-danger" %>
+    </div>
+ <div id="bugs">
+    <% @bugs.each do |bug| %>
+      <%= render bug %>
+    <% end %>
+  </div>
+<% end %>
+
