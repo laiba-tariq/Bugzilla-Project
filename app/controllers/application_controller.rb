@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   rescue_from ActionController::RoutingError, with: :render_404
   rescue_from Pundit::NotAuthorizedError, with: :render_not_authorized
-  before_action :authenticate_user!
+  # before_action :authenticate_user!,exce
 
   private
 

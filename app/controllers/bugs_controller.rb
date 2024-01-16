@@ -74,7 +74,8 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
   end
 
   def assigned_bugs
-    @bugs = Bug.where(id: params[:bug_ids], project_id: params[:project_id])    # # Fetch bugs based on project_id and bug_ids
+    @bugs = Bug.where(id: params[:bug_ids], project_id: params[:project_id])
+    @projects = policy_scope(Project)
     # @bugs = Bug.where(id: bug_ids, project_id: project_id)
     render 'assigned_bugs'
   end
@@ -111,7 +112,6 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
   def set_bug
     @bug = Bug.find(params[:id])
   end
-
 
   def bug_params
     params.require(:bug).permit(:title, :description, :screenshot, :deadline, :bug_type, :status, :assigned_to,

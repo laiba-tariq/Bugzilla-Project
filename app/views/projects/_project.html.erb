@@ -91,11 +91,7 @@
                   <% end %>
                 </td>
 
-                <% assigned_bugs = project.bugs.where.not(assigned_to: nil) %>
-                <% assigned_bugs.each do |bug| %>
-                  <% puts "Bug ID: #{bug.id}, Title: #{bug.title}, Assigned To: #{bug.assigned_to}" %>
-                <% end %>
-
+                <%# assigned_bugs = project.bugs.where.not(assigned_to: nil) %>
                 <td>
                   <%= turbo_frame_tag "project" do %>
                       <%= link_to "View Assigned", assigned_bugs_path(project_id:project.id, bug_ids: project.bugs.where.not(assigned_to: nil).pluck(:id)), class: 'btn btn-primary btn-sm', data: { turbo_frame: 'project' } %>
@@ -110,5 +106,5 @@
     </tbody>
   </table>
 <% else %>
-  <h1>No Projects</h1>
+  <h1 class="text-dark text-center">No Projects Assigned Yet</h1>
 <% end %>

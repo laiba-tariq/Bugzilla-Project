@@ -1,4 +1,3 @@
- <%#= turbo_frame_tag 'project' do%>
 <section style="background-color: #eee;">
   <div class="container py-5">
     <div class="row justify-content-center mb-3">
@@ -49,14 +48,22 @@
             <% end %>
             </div>
             <% elsif current_user.developer? && bug.assigned_to == current_user.id  %>
+            <%=turbo_frame_tag "project" do%>
                 <% if bug.bug_status=="New" %>
                   <%= form_with model: @bug, url: start_working_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
                     <%= form.submit 'Start Work', class: 'btn btn-warning btn-sm' %>
                   <% end %>
                 <%end %>
-                <%= form_with model: @bug, url: mark_complete_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
+                <% end %>
+                <%=turbo_frame_tag 'project' do%>
+               <%= form_with model: @bug, url: mark_complete_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
+                <% if bug.bug_status.in?(['Resolved', 'Completed']) %>
+                  <%= form.submit 'Mark as Complete', class: 'btn btn-success btn-sm', disabled: true %>
+                <% else %>
                   <%= form.submit 'Mark as Complete', class: 'btn btn-success btn-sm' %>
                 <% end %>
+              <% end %>
+              <% end %>
               </div>
             <% end %>
             </div>
@@ -66,5 +73,4 @@
     </div>
   </div>
 </section>
-<%# end %>
 

@@ -1,8 +1,7 @@
 <%= turbo_frame_tag "project" do %>
 <h1>Assignend Bugs</h1>
 <hr>
-<%= link_to 'Close', projects_path,class:"btn btn-danger text-end" %>
-
+<%= link_to 'Close', projects_path(@projects),class:"btn btn-danger text-end" %>
 <% if @bugs.present? %>
 <% @bugs.each do |bug| %>
 <%= render bug %>
@@ -11,6 +10,4 @@
   <p>No Assigned Bugs.</p>
 <%end%>
 <% end %>
-<% else %>
-<%= render 'page_not_found' %>
-<% end %>
+
