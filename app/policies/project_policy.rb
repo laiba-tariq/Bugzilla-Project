@@ -20,22 +20,10 @@ class ProjectPolicy < ApplicationPolicy # rubocop:disable Style/Documentation
     @project.created_by == @user.id if @project.present?
   end
 
-  def update?
-    show?
-  end
-
-  def destroy?
-    show?
-  end
-
-  def add_user?
-    show?
-  end
-
-  def remove_user?
-    show?
-  end
-
+  alias update? show?
+  alias destroy? show?
+  alias add_user? show?
+  alias remove_user? show?
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
       case @user.user_type.to_sym

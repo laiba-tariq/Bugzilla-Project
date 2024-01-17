@@ -1,10 +1,8 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @bug %>
-
-<div>
-  <%= link_to "Edit this bug", edit_project_bug_path(@bug) %> |
-  <%#= link_to "Back to bugs", bugs_path %>
-
-  <%#= button_to "Destroy this bug", @bug, method: :delete %>
-</div>
+<% @bugs.each do |bug| %>
+  <div>
+    <h3><%= bug.title %></h3>
+    <p>Description: <%= bug.description %></p>
+  </div>
+<% end %>
