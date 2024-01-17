@@ -15,10 +15,13 @@
           <th>Actions</th>
           <th>Bug count</th>
           <th>Feature count</th>
+          <th>Feature count</th>
         <% end %>
-
         <% if current_user.developer? %>
           <th>Actions</th>
+          <th>Status</th>
+                    <th></th>
+
         <% end %>
       </tr>
     </thead>
@@ -76,27 +79,28 @@
             </td>
           <% end %>
 
+          <td>
           <% if current_user.qa? || current_user.developer? %>
             <td>
               <%= turbo_frame_tag "project" do %>
                 <%= link_to "View Bug/Feature", project_bugs_path(project.id), class: 'btn btn-primary btn-sm', data: { turbo_frame: 'project' } %>
               <% end %>
             </td>
-
-            <td>
               <% if current_user.developer? && !current_user.qa? %>
-                <td>
+                  <%= turbo_frame_tag "project" do %>
+                      <%= link_to "View Assigned", assigned_bugs_path(project_id:project.id, bug_ids: project.bugs.where.not(assigned_to: nil).pluck(:id)), class: 'btn btn-success btn-sm', data: { turbo_frame: 'project' } %>
+                 <% end %>
+                 <td>
                   <%= turbo_frame_tag "project" do %>
                     <span>Assigned count: <%= project.bugs.where(project_id: project.id).where.not(assigned_to: nil).count %></span>
                   <% end %>
                 </td>
-
-                <%# assigned_bugs = project.bugs.where.not(assigned_to: nil) %>
-                <td>
+                 <td>
                   <%= turbo_frame_tag "project" do %>
-                      <%= link_to "View Assigned", assigned_bugs_path(project_id:project.id, bug_ids: project.bugs.where.not(assigned_to: nil).pluck(:id)), class: 'btn btn-primary btn-sm', data: { turbo_frame: 'project' } %>
-                 <% end %>
-
+                 <p>Started: <%= project.bugs.where(project_id: project.id, assigned_to: !nil, bug_status: 'Started').count %></p>
+                 <p>Completed: <%= project.bugs.where(project_id: project.id).where.not(assigned_to: nil).where(bug_status: ['Completed', 'Resolved']).count %></p>
+                  <% end %>
+                </td>
                 </td>
               <% end %>
             </td>

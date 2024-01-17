@@ -1,6 +1,5 @@
-<%= form_with model: [@project, @bug], local: true, html: { enctype: 'multipart/form-data' } do |form| %>
-  <% if bug.errors.any? %>
-    <div style="color: red">
+<% if bug.errors.any? %>
+    <div style="color: blue">
       <h2><%= pluralize(bug.errors.count, "error") %> prohibited this bug from being saved:</h2>
 
       <ul>
@@ -11,6 +10,7 @@
     </div>
   <% end %>
 
+<%= form_with  url: project_bugs_path(params[:project_id]), method: :post, model: [@project, @bug], local: true, html: { enctype: 'multipart/form-data' } do |form| %>
   <div>
     <%= form.label :title, style: "display: block" %>
     <%= form.text_field :title %>
@@ -22,45 +22,44 @@
   </div>
 
   <div>
-     <%= form.label :screenshot %>
-  <%= form.file_field :screenshot %>
-
-  </div>
+     <%= form.label :screenshot %><strong>  (only .png and .gif are acceptable)</strong><br>
+     <%=form.file_field :screenshot %>
+    </div>
 
   <div>
     <%= form.label :deadline, style: "display: block" %>
-  <%= form.date_field :deadline, value: @bug.deadline&.strftime("%Y-%m-%d %H:%M:%S") %>  </div>
+  <%= form.date_field :deadline, value: @bug.deadline&.strftime("%Y-%m-%d %H:%M:%S") %>
+   </div>
 
 
   <div class="mb-4 pb-2">
     <%= form.label :bug_type %>
     <%= form.select :bug_type, options_for_select(["Feature", "Bug"]) %>
   </div>
-      <%if current_user.developer?%>
+    <%if current_user.developer?%>
 
   <div class="mb-4 pb-2">
     <%= form.label :bug_type %>
     <%= form.select :bug_status, options_for_select(["Started", "Resolved", "Completed"]) %>
   </div>
-    <%end%>
   <div>
     <%= form.label :assigned_to, style: "display: block" %>
     <%= form.number_field :assigned_to %>
   </div>
+    <%end%>
 
-  <div>
-    <%= form.label :creater_id, style: "display: block" %>
-    <%= form.number_field :creater_id, value: current_user.id%>
-  </div>
+ <div>
+  <%= form.label :creater_Id, style: "display: block" %>
+  <%= form.text_field :creater_id, value: "#{current_user.username} - #{current_user.id}" %>
+</div>
 
   <div>
     <%= form.label :project_id, style: "display: block" %>
-    <%= form.number_field :project_id, value: @project.id %>
+    <%= form.number_field :project_id, value: params[:project_id] %>
   </div>
 
   <div>
     <%= form.submit class:"btn btn-primary" %>
     <%= link_to 'Cancel', projects_path, class: 'btn btn-danger' %>
-
   </div>
 <% end %>

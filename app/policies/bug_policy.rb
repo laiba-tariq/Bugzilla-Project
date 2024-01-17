@@ -12,7 +12,7 @@ class BugPolicy < ApplicationPolicy
   end
 
   def edit?
-    user.developer?
+    user.qa?
   end
 
   def assign_to_dev?

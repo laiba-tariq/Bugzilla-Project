@@ -9,12 +9,21 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-User.create({ email: 'saad12@gmail.com', password: 'saad1234', username: 'saad ali',
-              user_type: 'manager' })
-User.create({ email: 'aliza23@gmail.com', password: 'aliza23', username: 'Aliza Tariq',
-              user_type: 'developer' })
-User.create({ email: 'saliha90@gmail.com', password: 'saliha23', username: 'Saliha Qaiser',
-              user_type: 'developer' })
-
+user1 = User.create({ email: 'saad12@gmail.com', password: 'saad1234', username: 'saad ali',
+              usertype: 'manager' })
+user2 = User.create({ email: 'aliza23@gmail.com', password: 'aliza23', username: 'Aliza Tariq',
+              usertype: 'developer' })
+user3 = User.create({ email: 'saliha90@gmail.com', password: 'saliha23', username: 'Saliha Qaiser',
+              usertype: 'developer' })
 User.create({ email: 'abdullah87@gmail.com', password: 'abdullah89', username: 'Abdullah Nasir',
-              user_type: 'QA' })
+              usertype: 'QA' })
+
+project1 = Project.create({project_name: "project1", project_description: "Project1 Description", created_by: user1.id})
+project2 = Project.create({project_name: "project2", project_description: "Project2 Description", created_by: user1.id})
+project3 = Project.create({project_name: "project3", project_description: "Project3 Description", created_by: user2.id})
+project4 = Project.create({project_name: "project4", project_description: "Project4 Description", created_by: user2.id})
+project5 = Project.create({project_name: "project5", project_description: "Project5 Description", created_by: user2.id})
+project6 = Project.create({project_name: "project6", project_description: "Project6 Description", created_by: user2.id})
+project7 = Project.create({project_name: "project7", project_description: "Project7 Description", created_by: user3.id})
+
+bug1 = Bu

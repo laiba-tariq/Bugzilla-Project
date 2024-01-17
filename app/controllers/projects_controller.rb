@@ -24,7 +24,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     @project.created_by = current_user.id
     if @project.save
       @projects = policy_scope(Project)
-      # update
+      update_page
     else
       render :new
     end

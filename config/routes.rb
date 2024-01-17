@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# require_relative '../app/controllers/projects/bugs_controller'
 Rails.application.routes.draw do
   root to: 'home#index'
 
