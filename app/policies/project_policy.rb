@@ -17,7 +17,7 @@ class ProjectPolicy < ApplicationPolicy # rubocop:disable Style/Documentation
   end
 
   def show?
-    @user.present? && @project.present? && @project.created_by == @user.id
+    @project.created_by == @user.id if @project.present?
   end
 
   alias update? show?

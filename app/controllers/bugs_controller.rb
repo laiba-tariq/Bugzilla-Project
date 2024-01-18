@@ -130,6 +130,7 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
     ]
   end
 
+
   def authorize_bug
     if @bug.present?
       authorize @bug
