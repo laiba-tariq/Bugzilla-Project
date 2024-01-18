@@ -15,7 +15,7 @@
           <th>Actions</th>
           <th>Bug count</th>
           <th>Feature count</th>
-          <th>Feature count</th>
+          <th>View</th>
         <% end %>
         <% if current_user.developer? %>
           <th>Actions</th>
@@ -89,8 +89,9 @@
 
                  <td>
                   <%= turbo_frame_tag "project" do %>
-                    <span>Assigned count: <%= project.bugs.where(project_id: project.id).where.not(assigned_to: nil).count %></span>
-                  <% end %>
+                     <span>Assigned count: <%= project.bugs.where(project_id: project.id, assigned_to: current_user).count %></span>
+                   <% end %>
+
                   <%= turbo_frame_tag "project" do %>
                  <p>Started: <%= project.bugs.where(project_id: project.id, assigned_to: !nil, bug_status: 'Started').count %></p>
                  <p>Completed: <%= project.bugs.where(project_id: project.id).where.not(assigned_to: nil).where(bug_status: ['Completed', 'Resolved']).count %></p>
