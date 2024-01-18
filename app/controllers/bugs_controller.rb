@@ -22,7 +22,7 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
 
   # GET /projects/:project_id/bugs/new
   def new
-    # byebug
+    authorize_bug
     @project = Project.find(params[:project_id])
     @bug = @project.bugs.build(bug_status: :New)
   end
@@ -90,7 +90,7 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
     authorize_bug
     if @bug.update_attribute(:bug_status, 'Started')
       @bugs = Bug.where(project_id: params[:project_id])
-      byebug
+
       render turbo_stream: [
         turbo_stream.replace('second_frame', template: 'bugs/index', locals: { bug: @bugs }),
         turbo_stream.remove('project')

@@ -1,7 +1,7 @@
 <% if @projects.present? %>
-  <table class="table">
+  <table class="table table-bordered">
     <thead>
-      <tr>
+      <tr class="table-active">
         <th>ID</th>
         <th>Name</th>
         <th>Description</th>
@@ -20,8 +20,6 @@
         <% if current_user.developer? %>
           <th>Actions</th>
           <th>Status</th>
-                    <th></th>
-
         <% end %>
       </tr>
     </thead>
@@ -48,10 +46,8 @@
               <%= turbo_frame_tag "project" do %>
                 <%= link_to 'Edit Project', edit_project_path(project), class: 'btn btn-success btn-sm', data: { turbo_frame: 'project' }  %>
               <% end %>
-
               <%= button_to "Delete", project_path(project), method: :delete, class: "btn btn-danger btn-sm", data: { "turbo-method": :delete, turbo_confirm: "Are you sure?" } %>
             </td>
-
             <td>
               <%= turbo_frame_tag "project" do %>
                 <%= link_to "View Project", project_path(project.id), class: 'btn btn-primary btn-sm' %>
@@ -79,23 +75,22 @@
             </td>
           <% end %>
 
-          <td>
           <% if current_user.qa? || current_user.developer? %>
             <td>
               <%= turbo_frame_tag "project" do %>
                 <%= link_to "View Bug/Feature", project_bugs_path(project.id), class: 'btn btn-primary btn-sm', data: { turbo_frame: 'project' } %>
               <% end %>
-            </td>
               <% if current_user.developer? && !current_user.qa? %>
-                  <%= turbo_frame_tag "project" do %>
-                      <%= link_to "View Assigned", assigned_bugs_path(project_id:project.id, bug_ids: project.bugs.where.not(assigned_to: nil).pluck(:id)), class: 'btn btn-success btn-sm', data: { turbo_frame: 'project' } %>
+
+                <%= turbo_frame_tag "project" do %>
+                    <%= link_to "View Assigned/Completed", assigned_bugs_path(project_id:project.id, bug_ids: project.bugs.where.not(assigned_to: nil).pluck(:id)), class: 'btn btn-success btn-sm', data: { turbo_frame: 'project' } %>
                  <% end %>
+              </td>
+
                  <td>
                   <%= turbo_frame_tag "project" do %>
                     <span>Assigned count: <%= project.bugs.where(project_id: project.id).where.not(assigned_to: nil).count %></span>
                   <% end %>
-                </td>
-                 <td>
                   <%= turbo_frame_tag "project" do %>
                  <p>Started: <%= project.bugs.where(project_id: project.id, assigned_to: !nil, bug_status: 'Started').count %></p>
                  <p>Completed: <%= project.bugs.where(project_id: project.id).where.not(assigned_to: nil).where(bug_status: ['Completed', 'Resolved']).count %></p>
@@ -103,12 +98,11 @@
                 </td>
                 </td>
               <% end %>
-            </td>
           <% end %>
         </tr>
       <% end %>
     </tbody>
   </table>
 <% else %>
-  <h1 class="text-dark text-center">No Projects Assigned Yet</h1>
+  <h1 class="text-white text-center">No Projects Assigned Yet</h1>
 <% end %>

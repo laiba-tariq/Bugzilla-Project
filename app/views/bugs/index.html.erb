@@ -6,12 +6,11 @@
   </div>
   <div>
     <%if @bugs.present?%>
-    <% @bugs.each do |bug| %>
-      <%= render bug %>
-      
-    <% end %>
-    <% else %>
-    <h5>No bugs has been reported :)</h5>
-    <% end %>
+      <% @bugs.each do |bug| %>
+        <%= render bug %>
+      <% end %>
+      <% else %>
+      <h5>No bugs has been reported :)</h5>
+      <% end %>
   </div>
 <% end %>

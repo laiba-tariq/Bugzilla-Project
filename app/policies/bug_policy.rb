@@ -2,7 +2,9 @@ class BugPolicy < ApplicationPolicy
   def index?
     true
   end
-
+  def new?
+    user.qa?
+  end
   def create?
     @user.qa?
   end

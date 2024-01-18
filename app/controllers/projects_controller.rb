@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   before_action :authenticate_user!
   before_action :set_project, only: %i[edit update destroy add_user remove_user]
   before_action :authorize_project, except: %i[index create qa_projects]
-
+  before_action :authenticate_user!
   def index
     @projects = policy_scope(Project)
     @project = Project.new
@@ -13,9 +13,9 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   def show
     @project = Project.find(params[:id])
   end
-
   def new
     @project = Project.new
+    authorize_project
   end
 
   def create

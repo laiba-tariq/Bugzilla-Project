@@ -13,7 +13,7 @@ class ProjectPolicy < ApplicationPolicy # rubocop:disable Style/Documentation
   end
 
   def create?
-    @user.user_type.to_sym == :manager
+    @user.manager?
   end
 
   def show?
