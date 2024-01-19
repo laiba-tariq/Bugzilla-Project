@@ -89,12 +89,13 @@
 
                  <td>
                   <%= turbo_frame_tag "project" do %>
-                     <span>Assigned count: <%= project.bugs.where(project_id: project.id, assigned_to: current_user).count %></span>
+                   <span  data-turbo-frame='project' >Assigned count: <%= project.bugs.where(project_id: project.id, assigned_to: current_user).count %></span>
                    <% end %>
-
                   <%= turbo_frame_tag "project" do %>
-                 <p>Started: <%= project.bugs.where(project_id: project.id, assigned_to: !nil, bug_status: 'Started').count %></p>
-                 <p>Completed: <%= project.bugs.where(project_id: project.id).where.not(assigned_to: nil).where(bug_status: ['Completed', 'Resolved']).count %></p>
+                 <p data-turbo-frame='project'>Started: <%= project.bugs.where(project_id: project.id, assigned_to: !nil, bug_status: 'Started').count %></p>
+                    <% end %>
+                  <%= turbo_frame_tag "project" do %>
+                 <p data-turbo-frame='project'>Completed: <%= project.bugs.where(project_id: project.id).where.not(assigned_to: nil).where(bug_status: ['Completed', 'Resolved']).count %></p>
                   <% end %>
                 </td>
                 </td>
