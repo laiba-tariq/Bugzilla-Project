@@ -36,17 +36,15 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
 
   def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
     @project = Project.find(params[:id])
-    if params[:project][:add_user_form] == 'true'
+    if project_params[:add_user_form].present?
       selected_user_ids = project_params[:id].reject(&:empty?).map(&:to_i)
       new_user_ids = selected_user_ids - @project.user_ids
       @project.users << User.where(id: new_user_ids)
       @projects = policy_scope(Project)
-    elsif params[:project][:remove_user_form] == 'true'
+    elsif project_params[:remove_user_form].present?
       selected_user_ids = project_params[:id].reject(&:empty?)
       @project.users.delete(User.where(id: selected_user_ids))
-    end
-
-    if @project.update(project_params.except(:id))
+    elsif @project.update(project_params.except(:id))
       @projects = policy_scope(Project)
       update_page
     else
@@ -83,7 +81,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   end
 
   def project_params
-    params.require(:project).permit(:project_name, :project_description, id: [])
+    params.require(:project).permit(:project_name, :project_description, :add_user_form ,:remove_user_form,id: [])
   end
 
   def authorize_project
