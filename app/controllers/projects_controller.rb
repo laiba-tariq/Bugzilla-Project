@@ -41,9 +41,11 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
       new_user_ids = selected_user_ids - @project.user_ids
       @project.users << User.where(id: new_user_ids)
       @projects = policy_scope(Project)
+      update_page
     elsif project_params[:remove_user_form].present?
       selected_user_ids = project_params[:id].reject(&:empty?)
       @project.users.delete(User.where(id: selected_user_ids))
+      update_page
     elsif @project.update(project_params.except(:id))
       @projects = policy_scope(Project)
       update_page
