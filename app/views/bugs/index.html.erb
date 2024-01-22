@@ -1,14 +1,16 @@
-<%=turbo_frame_tag "project" do%>
 <p style="color: green"><%= notice %></p>
-
 <h1>Bugs</h1>
-    <div class="text-end mt-3">
-      <%= link_to 'Close', projects_path, class: "btn btn-danger" %>
-    </div>
- <div id="bugs">
-    <% @bugs.each do |bug| %>
-      <%= render bug %>
-    <% end %>
+<%= turbo_frame_tag "project" do %>
+  <div>
+    <%= link_to 'Close', projects_path, class: "btn btn-danger" %>
+  </div>
+  <div>
+    <%if @bugs.present?%>
+      <% @bugs.each do |bug| %>
+        <%= render bug %>
+      <% end %>
+      <% else %>
+      <h5>No bugs has been reported :)</h5>
+      <% end %>
   </div>
 <% end %>
-

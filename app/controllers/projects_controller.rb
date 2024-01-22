@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class ProjectsController < ApplicationController # rubocop:disable Style/Documentation
+  before_action :authenticate_user!
   before_action :set_project, only: %i[edit update destroy add_user remove_user]
   before_action :authorize_project, except: %i[index create qa_projects]
-
+  before_action :authenticate_user!
   def index
     @projects = policy_scope(Project)
     @project = Project.new
@@ -12,9 +13,9 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   def show
     @project = Project.find(params[:id])
   end
-
   def new
     @project = Project.new
+    authorize_project
   end
 
   def create
@@ -23,7 +24,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     @project.created_by = current_user.id
     if @project.save
       @projects = policy_scope(Project)
-      # update
+      update_page
     else
       render :new
     end
@@ -35,17 +36,15 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
 
   def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
     @project = Project.find(params[:id])
-    if params[:project][:add_user_form] == 'true'
+    if project_params[:add_user_form].present?
       selected_user_ids = project_params[:id].reject(&:empty?).map(&:to_i)
       new_user_ids = selected_user_ids - @project.user_ids
       @project.users << User.where(id: new_user_ids)
       @projects = policy_scope(Project)
-    elsif params[:project][:remove_user_form] == 'true'
+    elsif project_params[:remove_user_form].present?
       selected_user_ids = project_params[:id].reject(&:empty?)
       @project.users.delete(User.where(id: selected_user_ids))
-    end
-
-    if @project.update(project_params.except(:id))
+    elsif @project.update(project_params.except(:id))
       @projects = policy_scope(Project)
       update_page
     else
@@ -74,15 +73,15 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     render 'qa_projects'
   end
 
-
   private
 
   def set_project
     @project = Project.find(params[:id])
+    authorize_project
   end
 
   def project_params
-    params.require(:project).permit(:project_name, :project_description, id: [])
+    params.require(:project).permit(:project_name, :project_description, :add_user_form ,:remove_user_form,id: [])
   end
 
   def authorize_project

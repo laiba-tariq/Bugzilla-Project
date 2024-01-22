@@ -1,4 +1,5 @@
-  <%= turbo_frame_tag "project" do %>
+<%= turbo_frame_tag "project" do %>
+<% if user_signed_in? %>
     <h1>
       New Project
     </h1>
@@ -6,6 +7,7 @@
       <%= render "form", project: @project %>
     </div>
 	</div>
-<%end%>
-
-
+<% else %>
+<%= render 'page_not_found' %>
+<% end %>
+<% end %>
