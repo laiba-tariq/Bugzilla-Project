@@ -1,12 +1,12 @@
 <%= turbo_frame_tag "project" %>
-<% if current_user.manager? %>
-  <%= turbo_frame_tag "first_turbo_frame" do %>
-    <div class="container mx-auto mt-4">
-      <div class="col-lg-4 col-form-label">
-        <%= link_to "Create New Project", new_project_path, class: "btn btn-custom", data: { turbo_frame: "project" } %>
+  <% if current_user.manager? %>
+    <%= turbo_frame_tag "first_turbo_frame" do %>
+      <div class="container mx-auto mt-4">
+        <div class="col-lg-4 col-form-label">
+          <%= link_to "Add Project", new_project_path, class: "btn btn-new-project", data: { turbo_frame: "project" } %>
+        </div>
       </div>
-    </div>
-  <% end %>
+    <% end %>
 <% end %>
 
 <div class="container mx-auto">

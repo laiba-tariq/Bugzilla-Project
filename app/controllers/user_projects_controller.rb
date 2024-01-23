@@ -1,11 +1,10 @@
-# frozen_string_literal: true
-
 # app/controllers/project_users_controller.rb
 class UserProjectsController < ApplicationController
+  before_action :set_project
+
   def new
-    @project = Project.find(params[:project_id])
     @user_project = UserProject.new
-    @remaining_users = User.where.not(id: @project.users.pluck(:id))
+    @users = User.all
   end
 
   def create
@@ -13,7 +12,7 @@ class UserProjectsController < ApplicationController
 
     respond_to do |format|
       if @user_project.save
-        format.html { redirect_to @projects, notice: 'User added to project.' }
+        format.html { redirect_to @project, notice: 'User added to project.' }
         format.js
       else
         format.html { render :new }

@@ -1,53 +1,45 @@
 <% if bug.errors.any? %>
-    <div style="color: blue">
-      <h2><%= pluralize(bug.errors.count, "error") %> prohibited this bug from being saved:</h2>
-
-      <ul>
-        <% bug.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+  <div style="color: blue">
+    <h2><%= pluralize(bug.errors.count, "error") %> prohibited this bug from being saved:</h2>
+    <ul>
+      <% bug.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 <%= form_with  url: project_bugs_path(params[:project_id]), method: :post, model: [@project, @bug], local: true, html: { enctype: 'multipart/form-data' } do |form| %>
   <div>
     <%= form.label :title, style: "display: block" %>
     <%= form.text_field :title, class: 'form-control resizable-textarea' %>
   </div>
-
   <div>
     <%= form.label :description, style: "display: block" %>
     <%= form.text_field :description ,class: 'form-control resizable-textarea' %>
   </div>
-
   <div>
-     <%= form.label :screenshot %><strong>  (only .png and .gif are acceptable)</strong><br>
-<%= form.file_field :screenshot, accept: 'image/png, image/gif' %>
-    </div>
-
+    <%= form.label :screenshot %><strong>  (only .png and .gif are acceptable)</strong><br>
+    <%= form.file_field :screenshot, accept: 'image/png, image/gif' %>
+  </div>
   <div>
     <%= form.label :deadline, style: "display: block" %>
-  <%= form.date_field :deadline, value: @bug.deadline&.strftime("%Y-%m-%d %H:%M:%S") %>
-   </div>
-
-
+    <%= form.date_field :deadline, value: @bug.deadline&.strftime("%Y-%m-%d %H:%M:%S") %>
+  </div>
   <div class="mb-4 pb-2">
     <%= form.label :bug_type %>
     <%= form.select :bug_type, options_for_select(["Feature", "Bug"]) %>
   </div>
-    <%if current_user.developer?%>
-
-  <div class="mb-4 pb-2">
-    <%= form.label :type %>
-    <%= form.select :status, options_for_select(["Started", "Resolved", "Completed"]) %>
-  </div>
-  <div>
-    <%= form.label :assigned_to, style: "display: block" %>
-    <%= form.number_field :assigned_to %>
-  </div>
-    <%end%>
+  <%if current_user.developer?%>
+    <div class="mb-4 pb-2">
+      <%= form.label :type %>
+      <%= form.select :status, options_for_select(["Started", "Resolved", "Completed"]) %>
+    </div>
     <div>
+      <%= form.label :assigned_to, style: "display: block" %>
+      <%= form.number_field :assigned_to %>
+    </div>
+  <%end%>
+  <div>
     <%= form.label :creater_id, style: "display: block" %>
     <%= form.number_field :creater_id ,value: current_user.id,readonly:true %>
   </div>
@@ -55,7 +47,6 @@
     <%= form.label :project_id, style: "display: block" %>
     <%= form.text_field :project_id, value: params[:project_id] , readonly:true %>
   </div>
-
   <div>
     <%= form.submit class:"btn btn-primary" %>
     <%= link_to 'Cancel', projects_path, class: 'btn btn-danger' %>

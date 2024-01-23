@@ -1,8 +1,18 @@
 <%= turbo_frame_tag "project" do %>
-<h1>Projects Info</h1>
-<h2>  <%= @project.name%></h2>
-<h4><%= @project.description%></h4>
-<h4>No of Developers: <%= @project.users.developer.count %></h4>
-<h4>No of QA: <%=@project.users.qa.count%></h4>
-<%= link_to 'Close', projects_path,class:"btn btn-danger" %>
-<%end%>
+  <div class="max-w-xl mx-auto mt-8 p-8 bg-white rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold mb-4">Projects Info</h1>
+    <h2 class="text-2xl font-semibold mb-2">Name: <%= @project.name %></h2>
+    <p class="text-gray-600 mb-4 text-justify">Description: <%= @project.description %></p>
+<div class="flex justify-between mb-4">
+  <div>
+    <h4 class="text-lg font-semibold">No of QA: <%= @project.users.qa.count %></h4>
+  </div>
+  <div class="ml-4">
+    <h4 class="text-lg font-semibold">No of Developers: <%= @project.users.developer.count %></h4>
+  </div>
+</div>
+    <div class="flex justify-content-center">
+      <%= link_to 'Close', projects_path, class: "btn btn-danger" %>
+    </div>
+  </div>
+<% end %>

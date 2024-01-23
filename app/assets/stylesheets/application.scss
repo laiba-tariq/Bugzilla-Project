@@ -25,27 +25,44 @@ border: 1px solid black;}
   display: none !important;
 }
 .background {
-  background-color: #e7d5ff;
+  background-color: #f4ecff;
 }
 
-.btn-custom {
+.btn-new-project {
   background-color: rgb(34, 9, 42);
-  border-radius: 30px;
+  // border-radius: 30px;
   border: 2px solid #fff;
   padding: 8px 16px;
   font-size: 14px;
   line-height: 1.5;
   text-align: center;
   text-decoration: none;
-  color: white ; /* Replace with your desired text color */
+  color: white ;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
     border-color 0.2s ease-in-out;
 }
+.btn-add {
+  background-color: rgb(91, 12, 90);
+  color: white ;
 
-.btn-custom:hover {
-  transition: none; /* Remove transition on hover */
-  background-color: rgb(95, 12, 122); /* Replace with your desired hover background color */
-  color: white; /* Replace with your desired hover text color */
 }
+.btn-view {
+  background-color: rgb(156, 0, 119);
+  color: white ;
+}
+.btn-sign-out {
+  background-color: #9c3587;
+  color: white ;
+}
+.btn-edit {
+  background-color: #1B7979;
+  color: white ;
+}
+.btn-new-project:hover {
+  transition: none;
+  background-color: rgb(95, 12, 122);
+  color: white;
+}
+
 

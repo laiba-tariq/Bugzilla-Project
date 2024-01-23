@@ -3,9 +3,7 @@
     <%= @project.errors.full_messages.to_sentence %>
   </div>
 <% end %>
-
 <%= render "devise/shared/error_messages", resource: @project %>
-
 <div>
   <%= form_for @project, html: { class: 'bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4' } do |f| %>
     <div class="mb-4">
