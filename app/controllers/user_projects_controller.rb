@@ -4,7 +4,8 @@ class UserProjectsController < ApplicationController
 
   def new
     @user_project = UserProject.new
-    @users = User.all
+    @users = User.where(role: %w[developer qa])
+    @remaining_users = @users - @project.users
   end
 
   def create
@@ -12,22 +13,19 @@ class UserProjectsController < ApplicationController
 
     respond_to do |format|
       if @user_project.save
-        format.html { redirect_to @project, notice: 'User added to project.' }
-        format.js
+        format.html { redirect_to projects_path, notice: 'User added to project.' }
       else
         format.html { render :new }
-        format.js { render :error }
       end
     end
   end
 
   def destroy
-    @user_project = @project.user_projects.find(params[:id])
+    @user_project = @project.user_projects.find_by(user_id: params[:id])
     @user_project.destroy
 
     respond_to do |format|
-      format.html { redirect_to @project, notice: 'User removed from project.' }
-      format.js
+      format.html { redirect_to projects_path, notice: 'User removed from project.' }
     end
   end
 

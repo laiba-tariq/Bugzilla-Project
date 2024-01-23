@@ -11,7 +11,6 @@
             <th class="border-b p-2">Edit/Delete</th>
             <th class="border-b p-2">View</th>
           <% end %>
-
           <% if current_user.qa? %>
             <th class="border-b p-2">Actions</th>
             <th class="border-b p-2">Bug count</th>
@@ -23,7 +22,6 @@
           <% end %>
         </tr>
       </thead>
-
       <tbody>
         <% @projects.each do |project| %>
           <tr class="<%= cycle('bg-gray-50', 'bg-gray-100') %>">
@@ -35,10 +33,9 @@
             <% if current_user.manager? %>
               <td class="border-b p-2 <%= highlight_background?(current_user, project) ? 'bg-green-200' : '' %>">
                 <%= turbo_frame_tag "project" do %>
-                  <%= link_to "Add/Remove", new_user_project_path(project_id: @project_id), class: 'btn btn-add btn-sm inline-block', data: { turbo_frame: 'project' } %>
+                  <%= link_to "Add/Remove", new_user_project_path(project_id: project.id), class: 'btn btn-add btn-sm inline-block', data: { turbo_frame: 'project' } %>
                 <% end %>
               </td>
-
               <td class="border-b p-2 <%= highlight_background?(current_user, project) ? 'bg-green-200' : '' %>">
                 <%= turbo_frame_tag "project" do %>
                   <div class="flex space-x-2">
@@ -47,41 +44,33 @@
                   </div>
                 <% end %>
               </td>
-
               <td class="border-b p-2 <%= highlight_background?(current_user, project) ? 'bg-green-200' : '' %>">
                 <%= turbo_frame_tag "project" do %>
                   <%= link_to "View Project", project_path(project.id), class: 'btn btn-view btn-sm inline-block', data: { turbo_frame: 'project' } %>
                 <% end %>
               </td>
             <% end %>
-
             <% if current_user.qa? %>
               <td class="border-b p-2 <%= highlight_background?(current_user, project) ? 'bg-green-200' : '' %>">
                 <%= turbo_frame_tag "project" do %>
                   <%= link_to "Report a bug/feature", new_project_bug_path(project.id), class: 'btn btn-primary btn-sm inline-block', data: { turbo_frame: 'project' } %>
                 <% end %>
               </td>
-
               <td class="border-b p-2 <%= highlight_background?(current_user, project) ? 'bg-green-200' : '' %>">
                 <%= turbo_frame_tag "project" do %>
                   <%= project.bugs.where(bug_type: 'Bug').count %>
                 <% end %>
               </td>
-
               <td class="border-b p-2 <%= highlight_background?(current_user, project) ? 'bg-green-200' : '' %>">
                 <%= turbo_frame_tag "project" do %>
                   <%= project.bugs.where(bug_type: 'Feature').count %>
                 <% end %>
               </td>
             <% end %>
-
             <% if current_user.qa? || current_user.developer? %>
               <td class="border-b p-2 <%= highlight_background?(current_user, project) ? 'bg-green-200' : '' %>">
                 <%= turbo_frame_tag "project" do %>
                   <%= link_to "View Bug/Feature", project_bugs_path(project.id), class: 'btn btn-primary btn-sm inline-block', data: { turbo_frame: 'project' } %>
-                  <% if current_user.developer? && !current_user.qa? %>
-                    <%= link_to "View Assigned/Completed", assigned_bugs_path(project_id: project.id, bug_ids: project.bugs.where.not(assigned_to: nil).pluck(:id)), class: 'btn btn-success btn-sm inline-block', data: { turbo_frame: 'project' } %>
-                  <% end %>
                 </td>
               <% end %>
             <% end %>
