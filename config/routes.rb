@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root to: 'home#index'
 
   devise_for :users, controllers: { registrations: 'users/registrations' }
-  resources :user_projects, only: [:new, :create, :destroy]
+  resources :user_projects, only: %i[new create destroy]
 
   resources :projects do
     resources :bugs do

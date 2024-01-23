@@ -13,6 +13,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   def show
     @project = Project.find(params[:id])
   end
+
   def new
     @project = Project.new
     authorize_project
@@ -34,7 +35,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     @project = Project.find(params[:id])
   end
 
-  def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/PerceivedComplexity
+  def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @project = Project.find(params[:id])
     if project_params[:add_user_form].present?
       selected_user_ids = project_params[:id].reject(&:empty?).map(&:to_i)
@@ -83,7 +84,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   end
 
   def project_params
-    params.require(:project).permit(:name, :description, :add_user_form ,:remove_user_form,id: [])
+    params.require(:project).permit(:name, :description, :add_user_form, :remove_user_form, id: [])
   end
 
   def authorize_project

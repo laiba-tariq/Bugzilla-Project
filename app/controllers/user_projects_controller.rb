@@ -1,11 +1,11 @@
+# frozen_string_literal: true
+
 # app/controllers/project_users_controller.rb
 class UserProjectsController < ApplicationController
-
   def new
     @project = Project.find(params[:project_id])
     @user_project = UserProject.new
     @remaining_users = User.where.not(id: @project.users.pluck(:id))
-
   end
 
   def create

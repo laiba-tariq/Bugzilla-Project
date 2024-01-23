@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateBugs < ActiveRecord::Migration[7.1] # rubocop:disable Style/Documentation
   def change # rubocop:disable Metrics/MethodLength
     create_table :bugs do |t|

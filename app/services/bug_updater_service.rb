@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/services/bug_updater_service.rb
 class BugUpdaterService
   def initialize(bug, params)

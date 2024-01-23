@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
 class BugPolicy < ApplicationPolicy
   def index?
     true
   end
+
   def new?
     user.qa?
   end
+
   def create?
     @user.qa?
   end
@@ -32,7 +36,6 @@ class BugPolicy < ApplicationPolicy
   def assigned_bugs
     user.developer?
   end
-
 
   class Scope < Scope
     def resolve
