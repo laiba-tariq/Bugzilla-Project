@@ -69,11 +69,11 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     @qas = @project.users.where(user_type: User.user_types[:qa])
   end
 
-  def qa_projects
-    user_id = current_user.id
-    @qa_projects = Project.where(id: UserProject.where(user_id: user_id).pluck(:project_id))
-    render 'qa_projects'
-  end
+  # def qa_projects
+  #   user_id = current_user.id
+  #   @qa_projects = Project.where(id: UserProject.where(user_id: user_id).pluck(:project_id))
+  #   render 'qa_projects'
+  # end
 
   private
 

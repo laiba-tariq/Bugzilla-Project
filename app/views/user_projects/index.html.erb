@@ -1,0 +1,8 @@
+<%= form_with(model: [@project, @user], url: project_users_path(@project, @user), method: :post, remote: true) do |form| %>
+  <div class="input-group">
+    <%= form.collection_select :user_id, @users, :id, :name, {}, class: 'form-select' %>
+    <button type="submit" class="btn <%= @project.users.exists?(@user.user_id) ? 'btn-danger' : 'btn-success' %>">
+      <%= @project.users.exists?(@user.user_id) ? 'Remove User' : 'Add User' %>
+    </button>
+  </div>
+<% end %>

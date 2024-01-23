@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_16_101549) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_14_120935) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -43,33 +43,35 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_16_101549) do
     t.string "title", null: false
     t.string "description"
     t.string "screenshot"
-    t.datetime "deadline"
-    t.integer "bug_status", default: 0
-    t.integer "bug_type", default: 0
+    t.date "deadline"
+    t.integer "status", default: 0
+    t.integer "type", default: 0
+    t.integer "creater_id", null: false
+    t.integer "project_id", null: false
     t.integer "assigned_to"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "creater_id", null: false
-    t.integer "project_id", null: false
     t.index ["creater_id"], name: "index_bugs_on_creater_id"
     t.index ["project_id"], name: "index_bugs_on_project_id"
     t.index ["title"], name: "index_bugs_on_title"
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string "project_name"
-    t.string "project_description"
+    t.string "name", null: false
+    t.string "description"
+    t.integer "created_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "created_by"
+    t.index ["name"], name: "index_projects_on_name", unique: true
   end
 
   create_table "user_projects", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "project_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "project_id"
     t.index ["project_id"], name: "index_user_projects_on_project_id"
+    t.index ["user_id", "project_id"], name: "index_user_projects_on_user_id_and_project_id", unique: true
     t.index ["user_id"], name: "index_user_projects_on_user_id"
   end
 
@@ -82,7 +84,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_16_101549) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "username"
+    t.string "username", null: false
     t.integer "user_type"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

@@ -40,15 +40,15 @@
   <% end %>
 <% end %>
 
-<% if current_user.qa? %>
+<!--<% if current_user.qa? %>
   <%= turbo_frame_tag "first_turbo_frame" do %>
   <div class="row">
     <div class="col-lg-4 col-form-label">
-      <%= link_to "View My Projects", qa_projects_path, class: "btn btn-primary",data: { turbo_frame: "project" } %>
+      <%#= link_to "View My Projects", qa_projects_path, class: "btn btn-primary",data: { turbo_frame: "project" } %>
     </div>
   </div>
   <%end%>
-<% end %>
+<% end %>-->
 <div class="container-fluid">
   <%= turbo_frame_tag "second_frame" do %>
     <h1 class="text-white">Projects</h1>

@@ -13,17 +13,17 @@
 <%= form_with  url: project_bugs_path(params[:project_id]), method: :post, model: [@project, @bug], local: true, html: { enctype: 'multipart/form-data' } do |form| %>
   <div>
     <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title, class: 'form-control resizable-textarea' %>
   </div>
 
   <div>
     <%= form.label :description, style: "display: block" %>
-    <%= form.text_field :description %>
+    <%= form.text_field :description ,class: 'form-control resizable-textarea' %>
   </div>
 
   <div>
      <%= form.label :screenshot %><strong>  (only .png and .gif are acceptable)</strong><br>
-     <%=form.file_field :screenshot %>
+<%= form.file_field :screenshot, accept: 'image/png, image/gif' %>
     </div>
 
   <div>
@@ -47,15 +47,9 @@
     <%= form.number_field :assigned_to %>
   </div>
     <%end%>
-
- <div>
-  <%= form.label :creater_Id, style: "display: block" %>
-  <%= form.text_field :creater_id, value: current_user.id %>
-</div>
-
   <div>
     <%= form.label :project_id, style: "display: block" %>
-    <%= form.number_field :project_id, value: params[:project_id] %>
+    <%= form.text_field :project_id, value: params[:project_id] , readonly:true %>
   </div>
 
   <div>
