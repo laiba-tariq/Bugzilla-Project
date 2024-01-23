@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Bug < ApplicationRecord
-  VALID_EXTENSIONS = ['.png', '.gif']
+  VALID_EXTENSIONS = ['.png', '.gif'].freeze
 
   enum bug_type: { Feature: 0, Bug: 1 }
   enum status: { New: 0, Started: 1, Resolved: 2, Completed: 3 }

@@ -11,8 +11,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     @project = Project.new
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @project = Project.new
@@ -31,8 +30,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     if project_params[:add_user_form].present?
@@ -77,7 +75,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   private
 
   def set_project
-    @project = Project.find(params[:id]) 
+    @project = Project.find(params[:id])
     authorize_project
   end
 
