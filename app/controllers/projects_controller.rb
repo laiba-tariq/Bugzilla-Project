@@ -60,13 +60,13 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   end
 
   def add_user
-    @developers = User.where(user_type: User.user_types[:developer])
-    @qas = User.where(user_type: User.user_types[:qa])
+    @developers = User.where(role: User.roles[:developer])
+    @qas = User.where(role: User.roles[:qa])
   end
 
   def remove_user
-    @developers = @project.users.where(user_type: User.user_types[:developer])
-    @qas = @project.users.where(user_type: User.user_types[:qa])
+    @developers = @project.users.where(role: User.roles[:developer])
+    @qas = @project.users.where(role: User.roles[:qa])
   end
 
   # def qa_projects
@@ -83,7 +83,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   end
 
   def project_params
-    params.require(:project).permit(:project_name, :project_description, :add_user_form ,:remove_user_form,id: [])
+    params.require(:project).permit(:name, :description, :add_user_form ,:remove_user_form,id: [])
   end
 
   def authorize_project

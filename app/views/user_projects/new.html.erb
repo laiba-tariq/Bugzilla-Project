@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "project" do %>
 <% @project.users.each do |added_user| %>
   <div class="added-user">
-    <p><%= "#{added_user.username} - #{added_user.user_type}" %></p>
+    <p><%= "#{added_user.username} - #{added_user.role}" %></p>
     <%= button_to "Remove User", user_project_path(@project, added_user), method: :delete, class: 'btn btn-danger', data: { turbo_confirm: "Are you sure?" } %>
   </div>
 <% end %>
@@ -10,7 +10,7 @@
 
 <%# Display remaining users with Add User button %>
 <%= form_with(model: [@project, @user_project], url: user_projects_path, method: :post, remote: true, class: 'multiple') do |form| %>  <div class="input-group">
-    <%= form.collection_select :user_id, @remaining_users, :id, proc { |user| "#{user.username} - #{user.user_type}" }, {}, class: 'form-select' %>
+    <%= form.collection_select :user_id, @remaining_users, :id, proc { |user| "#{user.username} - #{user.role}" }, {}, class: 'form-select' %>
     <%= form.submit "Add User", class: 'btn btn-primary', data: { disable_with: "Adding..." } %>
   </div>
 <% end %>

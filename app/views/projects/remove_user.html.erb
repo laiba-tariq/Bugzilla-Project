@@ -4,7 +4,7 @@
 <div class="container-fluid">
 <%= form_for @project do |f|%>
   <%=f.label :name , class: 'col-md-12'%>
-  <%=f.text_field :project_name , class:'col-md-12' ,required: 'true' %>
+  <%=f.text_field :name , class:'col-md-12' ,required: 'true' %>
   <div class="field">
     <%= f.label :developer_ids, class: 'col-md-12' %>
     <%= f.collection_select :id, @developers, :id, :username, { include_blank: 'Select developers' }, { multiple: true, class: 'col-md-12' } %>

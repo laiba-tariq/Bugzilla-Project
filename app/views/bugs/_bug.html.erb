@@ -29,7 +29,7 @@
                   </div>
                   <div class="d-flex flex-row">
                     <span class="fw-bold">Status:</span>
-                    <%= bug.bug_status %>
+                    <%= bug.status %>
                   </div>
                   <div class="d-flex flex-row">
                     <span class="fw-bold">Deadline:</span>
@@ -49,7 +49,7 @@
                   </div>
                 <% elsif current_user.developer? && bug.assigned_to == current_user.id %>
                   <%= turbo_frame_tag "project" do %>
-                    <% if bug.bug_status == "New" %>
+                    <% if bug.status == "New" %>
                       <%= form_with model: @bug, url: start_working_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
                         <%= form.submit 'Start Work', class: 'btn btn-warning btn-sm' %>
                       <% end %>
@@ -57,7 +57,7 @@
                   <% end %>
                   <%= turbo_frame_tag 'project' do %>
                     <%= form_with model: @bug, url: mark_complete_project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
-                      <% if (bug.bug_status.in?(['Resolved', 'Completed'])|| bug.bug_status=='New') %>
+                      <% if (bug.status.in?(['Resolved', 'Completed'])|| bug.status=='New') %>
                         <%= form.submit 'Mark as Complete', class: 'btn btn-success btn-sm', disabled: true %>
                       <% else %>
                         <%= form.submit 'Mark as Complete', class: 'btn btn-success btn-sm' %>

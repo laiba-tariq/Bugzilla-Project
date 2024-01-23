@@ -7,10 +7,10 @@
 # Users data
 # Users data
 users_data = [
-  { email: 'saad12@gmail.com', encrypted_password: 'saad1234', username: 'saad ali', user_type: 'manager' },
-  { email: 'aliza23@gmail.com', encrypted_password: 'aliza23', username: 'Aliza Tariq', user_type: 'developer' },
-  { email: 'saliha90@gmail.com', encrypted_password: 'saliha23', username: 'Saliha Qaiser', user_type: 'developer' },
-  { email: 'abdullah87@gmail.com', encrypted_password: 'abdullah89', username: 'Abdullah Nasir', user_type: 'QA' }
+  { email: 'saad12@gmail.com', encrypted_password: 'saad1234', username: 'saad ali', role: 'manager' },
+  { email: 'aliza23@gmail.com', encrypted_password: 'aliza23', username: 'Aliza Tariq', role: 'developer' },
+  { email: 'saliha90@gmail.com', encrypted_password: 'saliha23', username: 'Saliha Qaiser', role: 'developer' },
+  { email: 'abdullah87@gmail.com', encrypted_password: 'abdullah89', username: 'Abdullah Nasir', role: 'QA' }
 ]
 
 users_data.each do |user|

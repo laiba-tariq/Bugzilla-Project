@@ -26,7 +26,7 @@ class ProjectPolicy < ApplicationPolicy # rubocop:disable Style/Documentation
   alias remove_user? show?
   class Scope < Scope # rubocop:disable Style/Documentation
     def resolve
-      case @user&.user_type&.to_sym
+      case @user&.role&.to_sym
       when :manager
         scope.where(created_by: @user.id)
       when :qa

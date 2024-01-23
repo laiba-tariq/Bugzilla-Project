@@ -24,7 +24,7 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
   def new
     authorize_bug
     @project = Project.find(params[:project_id])
-    @bug = @project.bugs.build(bug_status: :New)
+    @bug = @project.bugs.build(status: :New)
   end
 
   # POST /projects/:project_id/bugs
@@ -83,12 +83,11 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
       turbo_stream.update('second_frame', template: 'bugs/assigned_bugs', locals: { bugs: @bugs, projects: @projects }),
       turbo_stream.remove('project')
     ]
-    # render 'assigned_bugs'
   end
 
   def start_working
     authorize_bug
-    if @bug.update_attribute(:bug_status, 'Started')
+    if @bug.update_attribute(:status, 'Started')
       @bugs = Bug.where(project_id: params[:project_id])
 
       render turbo_stream: [
@@ -103,10 +102,10 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
   def mark_complete
     authorize_bug
     if @bug.update_attribute(:bug_type, 'Feature')
-      @bug.update_attribute(:bug_status, 'Completed')
+      @bug.update_attribute(:status, 'Completed')
       update_page
     elsif @bug.update_attribute(:bug_type, 'Bug')
-      @bug.update_attribute(:bug_status, 'Resolved')
+      @bug.update_attribute(:status, 'Resolved')
       update_page
     end
   end

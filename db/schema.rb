@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_14_120935) do
     t.string "screenshot"
     t.date "deadline"
     t.integer "status", default: 0
-    t.integer "type", default: 0
+    t.integer "bug_type", default: 0
     t.integer "creater_id", null: false
     t.integer "project_id", null: false
     t.integer "assigned_to"
@@ -85,7 +85,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_14_120935) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "username", null: false
-    t.integer "user_type"
+    t.integer "role"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

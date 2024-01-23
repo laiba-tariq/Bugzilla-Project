@@ -33,20 +33,24 @@
 
 
   <div class="mb-4 pb-2">
-    <%= form.label :bug_type %>
-    <%= form.select :bug_type, options_for_select(["Feature", "Bug"]) %>
+    <%= form.label :type %>
+    <%= form.select :type, options_for_select(["Feature", "Bug"]) %>
   </div>
     <%if current_user.developer?%>
 
   <div class="mb-4 pb-2">
-    <%= form.label :bug_type %>
-    <%= form.select :bug_status, options_for_select(["Started", "Resolved", "Completed"]) %>
+    <%= form.label :type %>
+    <%= form.select :status, options_for_select(["Started", "Resolved", "Completed"]) %>
   </div>
   <div>
     <%= form.label :assigned_to, style: "display: block" %>
     <%= form.number_field :assigned_to %>
   </div>
     <%end%>
+    <div>
+    <%= form.label :creater_id, style: "display: block" %>
+    <%= form.number_field :creater_id ,value: current_user.id,readonly:true %>
+  </div>
   <div>
     <%= form.label :project_id, style: "display: block" %>
     <%= form.text_field :project_id, value: params[:project_id] , readonly:true %>
