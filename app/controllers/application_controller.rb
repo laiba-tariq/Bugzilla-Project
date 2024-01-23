@@ -2,17 +2,10 @@
 
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
-  before_action :configure_permitted_parameters, if: :devise_controller?
   include Pundit
+  include AuthorizationConcern
 
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-
-  private
-
-  def user_not_authorized
-    flash[:alert] = "You don't have permission to perform this action."
-    redirect_to root_path
-  end
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
 

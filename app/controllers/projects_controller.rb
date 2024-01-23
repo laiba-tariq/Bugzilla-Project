@@ -2,16 +2,16 @@
 
 class ProjectsController < ApplicationController # rubocop:disable Style/Documentation
   before_action :authenticate_user!
-  before_action :set_project, only: %i[edit update destroy add_user remove_user]
+  before_action :set_project, only: %i[edit update destroy add_user remove_user show]
   before_action :authorize_project, except: %i[index create qa_projects]
   before_action :authenticate_user!
+
   def index
     @projects = policy_scope(Project)
     @project = Project.new
   end
 
   def show
-    @project = Project.find(params[:id])
   end
 
   def new
@@ -32,11 +32,9 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   end
 
   def edit
-    @project = Project.find(params[:id])
   end
 
   def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    @project = Project.find(params[:id])
     if project_params[:add_user_form].present?
       selected_user_ids = project_params[:id].reject(&:empty?).map(&:to_i)
       new_user_ids = selected_user_ids - @project.user_ids
@@ -61,7 +59,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   end
 
   def add_user
-    @developers = User.where(role: User.roles[:developer])
+    @developers = User.where(role: User.roles[:developer]) # USe scope
     @qas = User.where(role: User.roles[:qa])
   end
 
@@ -79,7 +77,7 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
   private
 
   def set_project
-    @project = Project.find(params[:id])
+    @project = Project.find(params[:id]) 
     authorize_project
   end
 

@@ -5,29 +5,26 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
   before_action :set_bug, only: %i[edit update destroy assign_to_dev start_working mark_complete]
   before_action :authorize_bug, except: %i[index assigned_bugs]
   before_action :set_bugs, only: [:show]
-  # GET /projects/:project_id/bugs
+
   def index
     @bugs = policy_scope(Bug)
-    @bugs = Bug.get_project(params[:project_id])
+    @bugs = Bug.by_project(params[:project_id])
 
     authorize @bugs
   end
 
-  # GET /projects/:project_id/bugs/1
   def show
     @project_id = params[:project_id]
-    @bugs = Bug.get_project(params[:project_id])
+    @bugs = Bug.by_project(params[:project_id])
     authorize @bugs
   end
 
-  # GET /projects/:project_id/bugs/new
   def new
     authorize_bug
     @project = Project.find(params[:project_id])
     @bug = @project.bugs.build(status: :New)
   end
 
-  # POST /projects/:project_id/bugs
   def create # rubocop:disable Metrics/MethodLength
     @bug = Bug.new(bug_params)
     if @bug.save
@@ -44,12 +41,8 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
     end
   end
 
-  # GET /projects/:project_id/bugs/1/edit
-  def edit
-    @bug = Bug.find(params[:id])
-  end
+  def edit; end
 
-  # PATCH/PUT /projects/:project_id/bugs/1
   def update
     if @bug.update(bug_params)
       redirect_to project_bug_path(@bug.project, @bug), notice: 'Bug was successfully updated.'
@@ -58,7 +51,6 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
     end
   end
 
-  # DELETE /projects/:project_id/bugs/1
   def destroy
     @bug.destroy
     redirect_to project_bugs_url, notice: 'Bug was successfully destroyed.'
@@ -137,3 +129,5 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
     end
   end
 end
+
+# Remove all comments
