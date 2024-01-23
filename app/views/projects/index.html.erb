@@ -1,57 +1,17 @@
-<!-- app/views/home/index.html.erb -->
-<nav class="navbar navbar-expand-lg" style="background-color: #8356C3;">
-  <!-- Container wrapper -->
-  <div class="container-fluid">
-    <!-- Navbar brand -->
-    <%= image_tag 'logoIcon.png', style: "width:19rem; height:8rem;" %>
-
-    <!-- Toggle button -->
-    <button
-      data-mdb-collapse-init
-      class="navbar-toggler bg-dark"
-      type="button"
-      data-mdb-target="#navbarButtonsExample"
-      aria-controls="navbarButtonsExample"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <i class="fas fa-bars"></i>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarButtonsExample">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <h4 class="text-center"><%= "#{current_user.role.capitalize} Dashboard" %></h4>      </ul>
-      <!-- Left links -->
-
-      <div class="d-flex align-items-center">
-        <%= link_to 'Edit Profile', edit_user_registration_path, class: "btn btn-success btn-lg me-3" %>
-        <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-lg btn-primary me-3" %>
-      </div>
-    </div>
-  </div>
-</nav>
 <%= turbo_frame_tag "project" %>
-<% if current_user.manager?%>
+<% if current_user.manager? %>
   <%= turbo_frame_tag "first_turbo_frame" do %>
-    <div class="row">
+    <div class="container mx-auto mt-4">
       <div class="col-lg-4 col-form-label">
-        <%= link_to "Create New Project", new_project_path, class: "btn btn-primary", data: { turbo_frame: "project" } %>
+        <%= link_to "Create New Project", new_project_path, class: "btn btn-custom", data: { turbo_frame: "project" } %>
       </div>
     </div>
   <% end %>
 <% end %>
 
-<!--<% if current_user.qa? %>
-  <%= turbo_frame_tag "first_turbo_frame" do %>
-  <div class="row">
-    <div class="col-lg-4 col-form-label">
-      <%#= link_to "View My Projects", qa_projects_path, class: "btn btn-primary",data: { turbo_frame: "project" } %>
-    </div>
-  </div>
-  <%end%>
-<% end %>-->
-<div class="container-fluid">
+<div class="container mx-auto">
   <%= turbo_frame_tag "second_frame" do %>
-    <h1 class="text-white">Projects</h1>
-    <%= render 'project', local: {project:@projects }%>
+    <h1 class="text-black bg-bold">Projects</h1>
+    <%= render 'project', local: { project: @projects } %>
   <% end %>
 </div>

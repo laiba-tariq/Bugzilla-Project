@@ -1,13 +1,14 @@
 <%= turbo_frame_tag "project" do %>
-<% if user_signed_in? %>
-    <h1>
-      New Project
-    </h1>
-    <div class="container-fluid modal-body bg-light d-flex align-items-center">
-      <%= render "form", project: @project %>
+  <% if user_signed_in? %>
+    <div class="mx-auto max-w-md">
+      <h1 class="text-2xl font-bold mb-4">
+        New Project
+      </h1>
+      <div class="flex items-center">
+        <%= render "form", project: @project %>
+      </div>
     </div>
-	</div>
-<% else %>
-<%= render 'page_not_found' %>
-<% end %>
+  <% else %>
+    <%= render 'page_not_found' %>
+  <% end %>
 <% end %>
