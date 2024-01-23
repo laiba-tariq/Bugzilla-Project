@@ -10,10 +10,12 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-info">
-    <p class = "notice" ><%= notice %> </p>
-<p class = "alert" ><%= alert %></p>
+  <body style="background-color: #8356C3;">
+  <% flash.each do |key, value| %>
+  <div class="flash <%= key %> bg-secondary"><h3><%= value %></h3></div>
+  <% end %>
 
     <%= yield %>
+
   </body>
 </html>

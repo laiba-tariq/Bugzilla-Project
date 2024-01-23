@@ -1,0 +1,2 @@
+module Projects::BugsHelper
+end
