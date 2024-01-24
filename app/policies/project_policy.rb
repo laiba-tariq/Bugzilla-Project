@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class ProjectPolicy < ApplicationPolicy # rubocop:disable Style/Documentation
+class ProjectPolicy < ApplicationPolicy
   attr_reader :user, :project
 
-  def initialize(user, project) # rubocop:disable Lint/MissingSuper
+  def initialize(user, project)
     @user = user
     @project = project
   end
@@ -24,7 +24,7 @@ class ProjectPolicy < ApplicationPolicy # rubocop:disable Style/Documentation
   alias destroy? show?
   alias add_user? show?
   alias remove_user? show?
-  class Scope < Scope # rubocop:disable Style/Documentation
+  class Scope < Scope
     def resolve
       case @user&.role&.to_sym
       when :manager

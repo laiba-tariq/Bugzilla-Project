@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class BugsController < ApplicationController # rubocop:disable Style/Documentation,Metrics/ClassLength
+class BugsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_bug, only: %i[edit update destroy assign_to_dev start_working mark_complete]
-  before_action :authorize_bug, except: %i[index assigned_bugs]
+  before_action :set_bug, only: %i[edit update destroy]
+  before_action :authorize_bug, except: %i[index]
   before_action :set_bugs, only: [:show]
 
   def index
@@ -20,12 +20,14 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
   end
 
   def new
+    p 'New'
     authorize_bug
     @project = Project.find(params[:project_id])
     @bug = @project.bugs.build(status: :New)
   end
 
   def create # rubocop:disable Metrics/MethodLength
+    p 'Created'
     @bug = Bug.new(bug_params)
     if @bug.save
       @projects = policy_scope(Project)
@@ -44,62 +46,19 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
   def edit; end
 
   def update
-    if @bug.update(bug_params)
-      redirect_to project_bug_path(@bug.project, @bug), notice: 'Bug was successfully updated.'
-    else
-      render :edit
-    end
+    @bug = Bug.find(params[:id])
+    p @bug
+    assigned_user_id = current_user.id
+    p params[:status]
+    bug_updater = BugUpdaterService.new(@bug, params, assigned_user_id)
+    turbo_stream_info = bug_updater.execute
+
+    render_turbo_stream(turbo_stream_info) if turbo_stream_info.present?
   end
 
   def destroy
     @bug.destroy
     redirect_to project_bugs_url, notice: 'Bug was successfully destroyed.'
-  end
-
-  def assign_to_dev
-    if @bug.update_attribute(:assigned_to, current_user.id)
-      @bugs = Bug.where(project_id: params[:project_id])
-      render turbo_stream: [
-        turbo_stream.replace('project', template: 'bugs/index', locals: { bug: @bugs }),
-        turbo_stream.remove('project')
-      ]
-    else
-      redirect_to @bugs, notice: 'Not Assigned'
-    end
-  end
-
-  def assigned_bugs
-    @bugs = Bug.where(id: params[:bug_ids], project_id: params[:project_id])
-    @projects = policy_scope(Project)
-    render turbo_stream: [
-      turbo_stream.update('second_frame', template: 'bugs/assigned_bugs', locals: { bugs: @bugs, projects: @projects }),
-      turbo_stream.remove('project')
-    ]
-  end
-
-  def start_working
-    authorize_bug
-    if @bug.update_attribute(:status, 'Started')
-      @bugs = Bug.where(project_id: params[:project_id])
-
-      render turbo_stream: [
-        turbo_stream.replace('second_frame', template: 'bugs/index', locals: { bug: @bugs }),
-        turbo_stream.remove('project')
-      ]
-    else
-      redirect_to @bugs, notice: 'Not Started'
-    end
-  end
-
-  def mark_complete
-    authorize_bug
-    if @bug.update_attribute(:bug_type, 'Feature')
-      @bug.update_attribute(:status, 'Completed')
-      update_page
-    elsif @bug.update_attribute(:bug_type, 'Bug')
-      @bug.update_attribute(:status, 'Resolved')
-      update_page
-    end
   end
 
   private
@@ -110,24 +69,26 @@ class BugsController < ApplicationController # rubocop:disable Style/Documentati
 
   def bug_params
     params.require(:bug).permit(:title, :description, :screenshot, :deadline, :bug_type, :status, :assigned_to,
-                                :creater_id, :project_id, :bugs)
+                                :creater_id, :project_id)
   end
 
-  def update_page
-    @bugs = Bug.where(project_id: params[:project_id])
+  def render_turbo_stream(info)
+    return unless info.is_a?(Hash)
+
     render turbo_stream: [
-      turbo_stream.replace('second_frame', template: 'bugs/index', locals: { bug: @bugs }),
-      turbo_stream.remove('project')
+      turbo_stream.replace(info[:replace_target], template: info[:template], locals: info[:locals]),
+      turbo_stream.remove(info[:remove_target])
     ]
   end
 
   def authorize_bug
+    p 'authorize_bug'
     if @bug.present?
+      p 'present'
       authorize @bug
     else
+      p 'absent'
       authorize Bug
     end
   end
 end
-
-# Remove all comments

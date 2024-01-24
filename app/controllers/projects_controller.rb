@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class ProjectsController < ApplicationController # rubocop:disable Style/Documentation
+class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_project, only: %i[edit update destroy add_user remove_user show]
-  before_action :authorize_project, except: %i[index create qa_projects]
+  before_action :set_project, only: %i[edit update destroy]
+  before_action :authorize_project, except: %i[index create]
   before_action :authenticate_user!
 
   def index
@@ -32,18 +32,8 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
 
   def edit; end
 
-  def update # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    if project_params[:add_user_form].present?
-      selected_user_ids = project_params[:id].reject(&:empty?).map(&:to_i)
-      new_user_ids = selected_user_ids - @project.user_ids
-      @project.users << User.where(id: new_user_ids)
-      @projects = policy_scope(Project)
-      update_page
-    elsif project_params[:remove_user_form].present?
-      selected_user_ids = project_params[:id].reject(&:empty?)
-      @project.users.delete(User.where(id: selected_user_ids))
-      update_page
-    elsif @project.update(project_params.except(:id))
+  def update
+    if @project.update(project_params.except(:id))
       @projects = policy_scope(Project)
       update_page
     else
@@ -55,22 +45,6 @@ class ProjectsController < ApplicationController # rubocop:disable Style/Documen
     @project.destroy
     redirect_to projects_path, notice: 'Project was successfully destroyed.'
   end
-
-  def add_user
-    @developers = User.where(role: User.roles[:developer]) # USe scope
-    @qas = User.where(role: User.roles[:qa])
-  end
-
-  def remove_user
-    @developers = @project.users.where(role: User.roles[:developer])
-    @qas = @project.users.where(role: User.roles[:qa])
-  end
-
-  # def qa_projects
-  #   user_id = current_user.id
-  #   @qa_projects = Project.where(id: UserProject.where(user_id: user_id).pluck(:project_id))
-  #   render 'qa_projects'
-  # end
 
   private
 

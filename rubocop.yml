@@ -33,4 +33,4 @@ Style/Documentation:
   Enabled: false
 
 Metrics/MethodLength:
-  Enab;e
+  Max: 19

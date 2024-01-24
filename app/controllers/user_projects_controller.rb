@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/controllers/project_users_controller.rb
 class UserProjectsController < ApplicationController
   before_action :set_project

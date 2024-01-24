@@ -21,19 +21,7 @@ class BugPolicy < ApplicationPolicy
     user.qa?
   end
 
-  def assign_to_dev?
-    user.developer?
-  end
-
-  def start_working?
-    user.developer? && record.assigned_to.present? && record.assigned_to == user.id
-  end
-
-  def mark_complete?
-    start_working?
-  end
-
-  def assigned_bugs
+  def update?
     user.developer?
   end
 
