@@ -32,15 +32,12 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Install mini_racer as the JavaScript runtime
-RUN apt-get install -y libv8-dev
-RUN gem install mini_racer
+# Install Node.js for asset precompilation
+RUN apt-get install -y nodejs
+
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile 2>&1 | tee assets_precompile.log
-
-# Display the contents of the log
-RUN cat assets_precompile.log
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base

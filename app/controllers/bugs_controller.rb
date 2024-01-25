@@ -9,8 +9,6 @@ class BugsController < ApplicationController
   def index
     @bugs = policy_scope(Bug)
     @bugs = Bug.by_project(params[:project_id])
-
-    authorize @bugs
   end
 
   def show
@@ -27,12 +25,14 @@ class BugsController < ApplicationController
 
   def create
     @bug = Bug.new(bug_params)
+    @bug.createt_id = current_user.id
     if @bug.save
       @projects = policy_scope(Project)
       render turbo_stream: [
-        turbo_stream.replace('project_frame', partial: 'projects/project', locals: { projects: @projects }),
-        turbo_stream.remove('project')
+        turbo_stream.replace("project_frame", partial: "projects/project", locals: { projects: @projects }),
+        turbo_stream.remove("project"),
       ]
+      flash[:notice] = "Bug was successfully created."
     else
       respond_to do |format|
         format.html { render :new }
@@ -44,18 +44,14 @@ class BugsController < ApplicationController
   def edit; end
 
   def update
-    @bug = Bug.find(params[:id])
-    assigned_user_id = current_user.id
-    p params[:status]
-    bug_updater = BugUpdaterService.new(@bug, params, assigned_user_id)
-    turbo_stream_info = bug_updater.execute
-
+    @bug.update(bug_params)
     render_turbo_stream(turbo_stream_info) if turbo_stream_info.present?
+    flash[:notice] = "Bug was successfully updated."
   end
 
   def destroy
     @bug.destroy
-    redirect_to project_bugs_url, notice: 'Bug was successfully destroyed.'
+    redirect_to project_bugs_url, notice: "Bug was successfully destroyed."
   end
 
   private
@@ -65,8 +61,8 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:title, :description, :screenshot, :deadline, :bug_type, :status, :assigned_to,
-                                :creater_id, :project_id)
+    params.permit(:title, :description, :screenshot, :deadline, :bug_type, :status, :assigned_to,
+                  :creater_id, :project_id)
   end
 
   def render_turbo_stream(info)
@@ -74,15 +70,11 @@ class BugsController < ApplicationController
 
     render turbo_stream: [
       turbo_stream.replace(info[:replace_target], template: info[:template], locals: info[:locals]),
-      turbo_stream.remove(info[:remove_target])
+      turbo_stream.remove(info[:remove_target]),
     ]
   end
 
   def authorize_bug
-    if @bug.present?
-      authorize @bug
-    else
-      authorize Bug
-    end
+    authorize Bug
   end
 end

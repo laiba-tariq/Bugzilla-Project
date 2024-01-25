@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'boot'
+require_relative "boot"
 
-require 'rails/all'
+require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -17,6 +17,8 @@ module BugzillaProject
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
+    config.assets.css_compressor = nil
+    config.assets.js_runtime = :node
     # config.eager_load_paths += Dir[Rails.root.join('app', 'controllers', '{**/}')]
     # Configuration for the application, engines, and railties goes here.
     #

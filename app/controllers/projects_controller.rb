@@ -3,8 +3,10 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_project, only: %i[edit update destroy show]
+
   def index
     @pagy, @projects = pagy(policy_scope(Project.order(:id)))
+    authorize_project
   end
 
   def show; end
@@ -20,6 +22,7 @@ class ProjectsController < ApplicationController
     if @project.save
       @projects = policy_scope(Project)
       update_page
+      flash[:notice] = "Project was successfully created."
     else
       render :new
     end
@@ -29,8 +32,7 @@ class ProjectsController < ApplicationController
 
   def update
     if @project.update(project_params.except(:id))
-      @projects = policy_scope(Project)
-      update_page
+      redirect_to project_path(@project), notice: "Project was successfully updated."
     else
       render "edit"
     end
@@ -52,7 +54,7 @@ class ProjectsController < ApplicationController
   end
 
   def authorize_project
-    authorize @project if @project.present?
+    authorize @projects
   end
 
   def update_page

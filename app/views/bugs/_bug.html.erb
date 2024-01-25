@@ -40,29 +40,31 @@
                     <%= truncate(bug.description, length: 30, separator: ' ', omission: '...') %>
                   </div>
                 </div>
-                <% if current_user.developer? && !bug.assigned_to? && !bug.status.in?(['Resolved', 'Completed']) %>
+                <% if current_user.developer? && bug.assigned_to.nil? %>
                   <div class="d-flex flex-column mt-4">
                     <%= form_with model: @bug, url: project_bug_path(bug.project, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
                       <%= form.hidden_field :assigned_to, value: current_user.id %>
                       <%= form.submit 'Assign to Myself', class: 'btn btn-primary btn-sm' %>
                     <% end %>
                   </div>
-                <% elsif current_user.developer? && bug.assigned_to == current_user.id %>
+                <% elsif current_user.developer? && bug.assigned_to == current_user %>
                   <%= turbo_frame_tag "project" do %>
                     <% if bug.status == "New" %>
                       <%= form_with model: @bug, url: project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
+                        <%= form.hidden_field :status, value: 'Started' %>
                         <%= form.submit 'Start Work', class: 'btn btn-warning btn-sm' %>
                       <% end %>
+                    <% elsif bug.Started? %>
+                      <%= form_with model: @bug, url: project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
+                        <% if bug.Feature? %>
+                          <%= form.hidden_field :status, value: 'Completed' %>
+                          <%= form.submit 'Mark as Complete', class: 'btn btn-success btn-sm', disabled: true %>
+                        <% else %>
+                          <%= form.hidden_field :status, value: 'Resolved' %>
+                          <%= form.submit 'Mark as Resolved', class: 'btn btn-success btn-sm' %>
+                        <% end %>
+                      <%end %>
                     <% end %>
-                  <% end %>
-                  <%= turbo_frame_tag 'project' do %>
-                    <%= form_with model: @bug, url: project_bug_path(bug.project_id, bug), method: :patch, data: { turbo_frame: 'project' } do |form| %>
-                      <% if (bug.status.in?(['Resolved', 'Completed'])|| bug.status=='New') %>
-                        <%= form.submit 'Mark as Complete', class: 'btn btn-success btn-sm', disabled: true %>
-                      <% else %>
-                        <%= form.submit 'Mark as Complete', class: 'btn btn-success btn-sm' %>
-                      <% end %>
-                    <%end %>
                   <% end %>
                 <% end %>
               </div>

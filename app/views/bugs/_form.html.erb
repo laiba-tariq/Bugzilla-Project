@@ -9,7 +9,6 @@
   </div>
 <% end %>
 <%= form_with url: project_bugs_path(params[:project_id]), method: :post, model: [@project, @bug], local: true, html: { class: 'd-block bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4 w-[50vw] m-auto', enctype: 'multipart/form-data' } do |form| %>
-
   <div class="mb-4">
     <%= form.label :title, class: "block text-gray-700 text-sm font-bold mb-2" %>
     <%= form.text_field :title, class: 'form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
@@ -38,14 +37,10 @@
         <%= form.label :type %>
         <%= form.select :status, options_for_select(["Started", "Resolved", "Completed"]), class: 'form-select w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
       </div>
-      <div class="w-1/2 pl-2">
-        <%= form.label :assigned_to, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= form.number_field :assigned_to, class: 'form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
-      </div>
     </div>
   <% end %>
   <div class="mb-4">
-    <%= form.hidden_field :creater_id, value: current_user.id, readonly: true, class: 'form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
+    <%= form.hidden_field :created_by, value: current_user.id, readonly: true, class: 'form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
   </div>
   <div class="mb-4">
     <%= form.hidden_field :project_id, value: params[:project_id], readonly: true, class: 'form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
