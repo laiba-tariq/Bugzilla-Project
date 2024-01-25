@@ -13,8 +13,7 @@ ENV RAILS_ENV="production" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
-
-# Throw-away build stage to reduce size of final image
+# Throw-away build stage to reduce the size of the final image
 FROM base as build
 
 # Install packages needed to build gems
@@ -33,9 +32,15 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# Install mini_racer as the JavaScript runtime
+RUN apt-get install -y libv8-dev
+RUN gem install mini_racer
 
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile 2>&1 | tee assets_precompile.log
+
+# Display the contents of the log
+RUN cat assets_precompile.log
 
 # Final stage for app image
 FROM base
@@ -49,14 +54,18 @@ RUN apt-get update -qq && \
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
 
+# Run bootsnap precompilation in the final stage
+RUN bundle exec bootsnap precompile /rails/app/ /rails/lib/
+
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp
+
 USER rails:rails
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start the server by default, this can be overwritten at runtime
+# Start the server by default; this can be overwritten at runtime
 EXPOSE 3000
 CMD ["./bin/rails", "server"]
