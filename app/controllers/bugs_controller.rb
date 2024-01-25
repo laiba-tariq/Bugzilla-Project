@@ -20,19 +20,17 @@ class BugsController < ApplicationController
   end
 
   def new
-    p 'New'
     authorize_bug
     @project = Project.find(params[:project_id])
     @bug = @project.bugs.build(status: :New)
   end
 
-  def create # rubocop:disable Metrics/MethodLength
-    p 'Created'
+  def create
     @bug = Bug.new(bug_params)
     if @bug.save
       @projects = policy_scope(Project)
       render turbo_stream: [
-        turbo_stream.replace('second_frame', partial: 'projects/project', locals: { projects: @projects }),
+        turbo_stream.replace('project_frame', partial: 'projects/project', locals: { projects: @projects }),
         turbo_stream.remove('project')
       ]
     else
@@ -47,7 +45,6 @@ class BugsController < ApplicationController
 
   def update
     @bug = Bug.find(params[:id])
-    p @bug
     assigned_user_id = current_user.id
     p params[:status]
     bug_updater = BugUpdaterService.new(@bug, params, assigned_user_id)
@@ -82,12 +79,9 @@ class BugsController < ApplicationController
   end
 
   def authorize_bug
-    p 'authorize_bug'
     if @bug.present?
-      p 'present'
       authorize @bug
     else
-      p 'absent'
       authorize Bug
     end
   end

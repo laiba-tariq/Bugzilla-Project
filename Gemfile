@@ -37,6 +37,8 @@ gem 'sassc-rails'
 gem 'activestorage'
 gem 'devise'
 gem 'pundit'
+gem 'pagy', '~> 6.4' # omit patch digit
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mswin mswin64 mingw x64_mingw jruby]
 

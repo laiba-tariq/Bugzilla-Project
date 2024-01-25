@@ -2,20 +2,15 @@
 
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_project, only: %i[edit update destroy]
-  before_action :authorize_project, except: %i[index create]
-  before_action :authenticate_user!
-
+  before_action :set_project, only: %i[edit update destroy show]
   def index
-    @projects = policy_scope(Project)
-    @project = Project.new
+    @pagy, @projects = pagy(policy_scope(Project.order(:id)))
   end
 
   def show; end
 
   def new
     @project = Project.new
-    authorize_project
   end
 
   def create
@@ -37,20 +32,19 @@ class ProjectsController < ApplicationController
       @projects = policy_scope(Project)
       update_page
     else
-      render 'edit'
+      render "edit"
     end
   end
 
   def destroy
     @project.destroy
-    redirect_to projects_path, notice: 'Project was successfully destroyed.'
+    redirect_to projects_path, notice: "Project was successfully destroyed."
   end
 
   private
 
   def set_project
     @project = Project.find(params[:id])
-    authorize_project
   end
 
   def project_params
@@ -63,8 +57,8 @@ class ProjectsController < ApplicationController
 
   def update_page
     render turbo_stream: [
-      turbo_stream.replace('second_frame', partial: 'project', locals: { projects: @projects }),
-      turbo_stream.remove('project')
+      turbo_stream.replace("project_frame", partial: "project", locals: { projects: @projects }),
+      turbo_stream.remove("project"),
     ]
   end
 end
