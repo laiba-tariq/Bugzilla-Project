@@ -29,10 +29,10 @@ class BugsController < ApplicationController
     if @bug.save
       @projects = policy_scope(Project)
       render turbo_stream: [
-        turbo_stream.replace("project_frame", partial: "projects/project", locals: { projects: @projects }),
-        turbo_stream.remove("project"),
+        turbo_stream.replace('project_frame', partial: 'projects/project', locals: { projects: @projects }),
+        turbo_stream.remove('project')
       ]
-      flash[:notice] = "Bug was successfully created."
+      flash[:notice] = 'Bug was successfully created.'
     else
       respond_to do |format|
         format.html { render :new }
@@ -46,12 +46,12 @@ class BugsController < ApplicationController
   def update
     @bug.update(bug_params)
     render_turbo_stream(turbo_stream_info) if turbo_stream_info.present?
-    flash[:notice] = "Bug was successfully updated."
+    flash[:notice] = 'Bug was successfully updated.'
   end
 
   def destroy
     @bug.destroy
-    redirect_to project_bugs_url, notice: "Bug was successfully destroyed."
+    redirect_to project_bugs_url, notice: 'Bug was successfully destroyed.'
   end
 
   private
@@ -70,7 +70,7 @@ class BugsController < ApplicationController
 
     render turbo_stream: [
       turbo_stream.replace(info[:replace_target], template: info[:template], locals: info[:locals]),
-      turbo_stream.remove(info[:remove_target]),
+      turbo_stream.remove(info[:remove_target])
     ]
   end
 
