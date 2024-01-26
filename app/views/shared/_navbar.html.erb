@@ -1,0 +1,37 @@
+<nav class="bg-purple-900 py-2">
+  <div class="container mx-auto flex items-center justify-between">
+    <div class="flex items-center">
+      <%= link_to projects_path do %>
+        <%= image_tag 'bug.png' %>
+      <% end %>
+      <span class="ml-2 text-white text-xl font-bold">BugZilla</span>
+    </div>
+    <button
+      data-mdb-collapse-init
+      class="text-white focus:outline-none lg:hidden"
+      type="button"
+      data-mdb-target="#navbarButtonsExample"
+      aria-controls="navbarButtonsExample"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="items-center">
+      <h4 class="text-white text-lg">
+        <% if current_user.present? %>
+          <%= "#{current_user.role.capitalize} Dashboard" %>
+          <div class="flex items-center space-x-4">
+            <%= link_to 'Edit Profile', edit_user_registration_path, class: "btn btn-edit" %>
+            <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "btn btn-sign-out" %>
+          </div>
+        <% else %>
+          <div class="flex items-center space-x-4">
+            <%= link_to "Login", new_user_session_path, class: "btn btn-primary mr-2" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-secondary" %>
+          </div>
+        <% end %>
+      </h4>
+    </div>
+  </div>
+</nav>

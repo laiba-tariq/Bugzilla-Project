@@ -1,0 +1,22 @@
+version: '2.1'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: bugzilla-project:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/rails
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: "development"
+      DATABASE_URL: "sqlite3:///rails/db/development.sqlite"
+
+  db:
+    image: "keinos/sqlite3:latest"
+    volumes:
+      - ./db:/rails/db

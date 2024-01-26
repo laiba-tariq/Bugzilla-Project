@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BugzillaProject</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= javascript_importmap_tags %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "application", "data-turbo-track": "reload" %>
+  </head>
+  <body class="background">
+    <%= render "shared/navbar" %>
+    <%= yield %>
+    <% flash.each do |key, value| %>
+      <div class="flash <%= key %> bg-secondary">
+        <h3><%= value %></h3>
+      </div>
+    <% end %>
+  </body>
+</html>

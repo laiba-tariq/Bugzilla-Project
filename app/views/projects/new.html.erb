@@ -1,0 +1,10 @@
+<%= turbo_frame_tag "project" do %>
+  <div class="mx-auto max-w-md">
+    <h1 class="text-2xl font-bold mb-4">
+      New Project
+    </h1>
+    <div class="flex items-center">
+      <%= render "form", project: @project %>
+    </div>
+  </div>
+<% end %>
