@@ -15,7 +15,6 @@ class Bug < ApplicationRecord
   validates :screenshot, content_type: 'image/png'
 
   validates :title, :bug_type, :status, presence: true
-  validate :validate_bug_type
   validates_uniqueness_of :title, scope: :project_id
 
   # validate :screenshot_type
@@ -24,15 +23,13 @@ class Bug < ApplicationRecord
 
   private
 
-  def validate_bug_type
-    # It validate that the bug's assigned_to will be nil only in case of new status.
-  end
 
-  def screenshot_type
-    return unless screenshot.attached?
 
-    return if VALID_EXTENSIONS.include?(File.extname(screenshot.filename.to_s).downcase)
+#   def screenshot_type
+#     return unless screenshot.attached?
 
-    errors.add(:screenshot, "only supports .png or .gif")
-  end
-end
+#     return if VALID_EXTENSIONS.include?(File.extname(screenshot.filename.to_s).downcase)
+
+#     errors.add(:screenshot, "only supports .png or .gif")
+#   end
+ end
