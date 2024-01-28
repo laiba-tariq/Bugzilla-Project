@@ -8,45 +8,45 @@
     </ul>
   </div>
 <% end %>
-<%= form_with url: project_bugs_path(params[:project_id]), method: :post, model: [@project, @bug], local: true, html: { class: 'd-block bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4 w-[50vw] m-auto', enctype: 'multipart/form-data' } do |form| %>
+<%= form_with url: project_bugs_path(params[:project_id]), method: :post, model: [@project, @bug], local: true, html: { class: "d-block bg-white shadow-md rounded px-6 pt-6 pb-8 mb-4 w-[50vw] m-auto", enctype: "multipart/form-data" } do |form| %>
   <div class="mb-4">
     <%= form.label :title, class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <%= form.text_field :title, class: 'form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
+    <%= form.text_field :title, class: "form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md" %>
   </div>
   <div class="flex mb-4">
     <div class="w-1/2 pr-2">
       <%= form.label :deadline, class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.date_field :deadline, value: @bug.deadline&.strftime("%Y-%m-%d %H:%M:%S"), class: 'form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
+      <%= form.date_field :deadline, value: @bug.deadline&.strftime("%Y-%m-%d %H:%M:%S"), class: "form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md" %>
     </div>
     <div class="w-1/2 pl-2">
       <%= form.label :bug_type, class: "block text-gray-700 text-sm font-bold mb-2" %>
-      <%= form.select :bug_type, options_for_select(["Feature", "Bug"]), class: 'form-select w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
+      <%= form.select :bug_type, options_for_select(["Feature", "Bug"]), class: "form-select w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md" %>
     </div>
   </div>
   <div class="mb-4">
     <%= form.label :description, class: "block text-gray-700 text-sm font-bold mb-2" %>
-    <%= form.text_field :description, class: 'form-control', resizable: true %>
+    <%= form.text_field :description, class: "form-control", resizable: true %>
   </div>
   <div class="mb-4">
     <%= form.label :screenshot %><strong> (only .png and .gif are acceptable)</strong><br>
-    <%= form.file_field :screenshot, accept: 'image/png, image/gif' %>
+    <%= form.file_field :screenshot %>
   </div>
   <% if current_user.developer? %>
     <div class="flex mb-4">
       <div class="w-1/2 pr-2">
         <%= form.label :type %>
-        <%= form.select :status, options_for_select(["Started", "Resolved", "Completed"]), class: 'form-select w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
+        <%= form.select :status, options_for_select(["Started", "Resolved", "Completed"]), class: "form-select w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md" %>
       </div>
     </div>
   <% end %>
   <div class="mb-4">
-    <%= form.hidden_field :created_by, value: current_user.id, readonly: true, class: 'form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
+    <%= form.hidden_field :creater_id, value: current_user.id, readonly: true, class: "form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md" %>
   </div>
   <div class="mb-4">
-    <%= form.hidden_field :project_id, value: params[:project_id], readonly: true, class: 'form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md' %>
+    <%= form.hidden_field :project_id, value: params[:project_id], readonly: true, class: "form-input w-full py-2 px-3 border focus:border-indigo-500 focus:outline-none rounded-md" %>
   </div>
   <div class="flex items-center justify-around">
-    <%= form.submit 'Save', class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline-blue active:bg-blue-800' %>
-    <%= link_to 'Cancel', projects_path, class: 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline-red active:bg-red-800' %>
+    <%= form.submit "Save", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline-blue active:bg-blue-800" %>
+    <%= link_to "Cancel", projects_path, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline-red active:bg-red-800" %>
   </div>
 <% end %>

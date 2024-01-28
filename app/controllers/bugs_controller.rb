@@ -25,7 +25,8 @@ class BugsController < ApplicationController
 
   def create
     @bug = Bug.new(bug_params)
-    @bug.createt_id = current_user.id
+    @bug.creater_id = current_user.id
+    puts "Bug attributes: #{@bug.attributes}"
     if @bug.save
       @projects = policy_scope(Project)
       render turbo_stream: [
@@ -61,7 +62,7 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.permit(:title, :description, :screenshot, :deadline, :bug_type, :status, :assigned_to,
+    params.require(:bug).permit(:title, :description, :screenshot, :deadline, :bug_type, :status, :assigned_to,
                   :creater_id, :project_id)
   end
 
