@@ -56,9 +56,12 @@ group :development, :test do
   gem 'byebug'
   gem 'debug', platforms: %i[mri mswin mswin64 mingw x64_mingw]
   gem 'rubocop'
-  gem 'rubocop-minitest' # or gem 'rubocop-rspec' depending on your test suite
+  gem 'factory_bot_rails'
+  gem 'rspec-rails', '~> 6.1.0'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
+  gem 'shoulda-callback-matchers', '~> 1.1.1'
+  gem 'shoulda-matchers', '~> 4.0'
 end
 
 group :development do
@@ -73,3 +76,4 @@ group :test do
 end
 
 gem 'tailwindcss-rails', '~> 2.3'
+gem 'faker'

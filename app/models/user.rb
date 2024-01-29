@@ -8,7 +8,7 @@ class User < ApplicationRecord # rubocop:disable Style/Documentation
 
   has_many :user_projects
   has_many :projects, through: :user_projects
-  has_many :bugs
+  has_many :bugs, foreign_key: :creater_id
   has_many :assigned_bugs, foreign_key: :assigned_to, class_name: 'Bug'
 
   validates :username, presence: true, uniqueness: true
