@@ -61,7 +61,7 @@ group :development, :test do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
-  gem 'shoulda-matchers', '~> 4.0'
+  # gem 'shoulda-matchers', '~> 4.0'
 end
 
 group :development do
@@ -73,6 +73,9 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
   gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
+  gem 'database_cleaner'
+
 end
 
 gem 'tailwindcss-rails', '~> 2.3'

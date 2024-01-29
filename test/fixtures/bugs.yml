@@ -1,19 +1,25 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# /test/fixtures/bugs.yml
 
 one:
-  title: MyString
-  description: MyString
-  screenshot: MyString
-  deadline: 2024-01-12 18:14:02
-  type: 1
+  title: "MyString"
+  description: "MyString"
+  deadline: "2024-01-12 18:14:02"
+  bug_type: 1
   status: 1
   assigned_to: 1
+  screenshot:
+    io: <%= Rails.root.join('test', 'fixtures', 'files', 'example_image.png').to_s %> # Path to a sample image file
+    filename: example_image.png
+    content_type: image/png
 
 two:
-  title: MyString
-  description: MyString
-  screenshot: MyString
-  deadline: 2024-01-12 18:14:02
-  type: 0
+  title: "MyString"
+  description: "MyString"
+  deadline: "2024-01-12 18:14:02"
+  bug_type: 0
   status: 1
   assigned_to: 1
+  screenshot:
+    io: <%= Rails.root.join('test', 'fixtures', 'files', 'example_image.png').to_s %> # Path to a sample image file
+    filename: example_image.png
+    content_type: image/png
