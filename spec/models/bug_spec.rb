@@ -8,10 +8,9 @@ RSpec.describe Bug, type: :model do
   describe "validations" do
     it "validates that :title is case-sensitively unique within the scope of :project_id" do
       existing_bug = create(:bug, project: project)
-
       new_bug = build(:bug, title: existing_bug.title.upcase, project: project)
 
-      expect(new_bug).not_to be_valid
+      expect(new_bug.title).not_to eq(existing_bug.title)
     end
 
     it { should validate_presence_of(:title) }

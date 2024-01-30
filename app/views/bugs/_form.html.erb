@@ -1,5 +1,5 @@
 <% if bug.errors.any? %>
-  <div style="color: blue">
+  <div style="color: red; background-color: #fdd; padding: 10px; margin-bottom: 10px;">
     <h2><%= pluralize(bug.errors.count, "error") %> prohibited this bug from being saved:</h2>
     <ul>
       <% bug.errors.each do |error| %>
@@ -29,7 +29,7 @@
   </div>
   <div class="mb-4">
     <%= form.label :screenshot %><strong> (only .png and .gif are acceptable)</strong><br>
-    <%= form.file_field :screenshot %>
+    <%= form.file_field :screenshot, accept: 'image/png, image/gif' %>
   </div>
   <% if current_user.developer? %>
     <div class="flex mb-4">

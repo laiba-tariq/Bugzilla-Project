@@ -15,25 +15,32 @@ RSpec.describe ProjectsController, type: :controller do
       expect(response).to be_successful
     end
   end
+  describe "GET #new" do
+    it "returns a success response" do
+      get :new
+      expect(response).to be_successful
+    end
+  end
 
   describe "GET #show" do
-  it "renders project_path, or if not found, renders projects_path with an alert" do
-    allow(Project).to receive(:find).and_return(project)
+    it "renders project_path, or if not found, renders projects_path with an alert" do
+      allow(Project).to receive(:find).and_return(project)
 
-    get :show, params: { id: project.id }
+      get :show, params: { id: project.id }
 
-    if project
-      expect(response).to have_http_status(:ok)
-    else
-      expect(response).to have_http_status(:ok)
-      expect(response).to render_template('projects/show')
+      if project
+        expect(response).to have_http_status(:ok)
+      else
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template("projects/show")
+      end
+
+      expect(flash[:alert]).to eq("Record not found.") if project.nil?
     end
-
-    expect(flash[:alert]).to eq("Record not found.") if project.nil?
   end
-end
 
   describe "POST #create" do
+    before { user.role = 0 }
     it "returns a success response" do
       post :create, params: { project: attributes_for(:project) }
       expect(response).to be_successful
@@ -41,6 +48,7 @@ end
   end
 
   describe "GET #edit" do
+    before { user.role = 0 }
     it "returns a success response" do
       get :edit, params: { id: project.id }
       expect(response).to be_successful
@@ -48,6 +56,7 @@ end
   end
 
   describe "PUT #update" do
+    before { user.role = 0 }
     let(:updated_params) { { name: "Updated Project Name" } }
 
     it "updates the project" do
@@ -63,6 +72,8 @@ end
   end
 
   describe "DELETE #destroy" do
+    before { user.role = 0 }
+
     it "destroys the project" do
       project # Ensure the project exists
       expect do
