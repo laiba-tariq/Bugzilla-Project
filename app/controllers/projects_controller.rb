@@ -9,7 +9,9 @@ class ProjectsController < ApplicationController
     authorize_project
   end
 
-  def show; end
+  def show
+      authorize @project
+  end
 
   def new
     @project = Project.new
