@@ -34,7 +34,6 @@ class ProjectsController < ApplicationController
   def edit; end
 
   def update
-    byebug
     if @project.update(project_params.except(:id))
       redirect_to project_path(@project), notice: 'Project was successfully updated.'
     else
