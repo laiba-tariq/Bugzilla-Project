@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/factories/bugs.rb
 FactoryBot.define do
   factory :bug do

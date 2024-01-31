@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
-require_relative "support/factory_bot"
+require_relative 'support/factory_bot'
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 require 'shoulda/matchers'
 require 'database_cleaner'
-
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
@@ -44,7 +45,6 @@ RSpec.configure do |config|
   config.include Pundit::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.use_transactional_fixtures = true
-
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [

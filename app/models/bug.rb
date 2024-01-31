@@ -5,9 +5,9 @@ class Bug < ApplicationRecord
   enum status: { New: 0, Started: 1, Resolved: 2, Completed: 3 }
 
   belongs_to :project
-  belongs_to :creater, class_name: "User", foreign_key: :creater_id
+  belongs_to :creater, class_name: 'User', foreign_key: :creater_id
 
-  belongs_to :assigned_to, class_name: "User", foreign_key: :assigned_to, optional: true
+  belongs_to :assigned_to, class_name: 'User', foreign_key: :assigned_to, optional: true
 
   has_one_attached :screenshot
 

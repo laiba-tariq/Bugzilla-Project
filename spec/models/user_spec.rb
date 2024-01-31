@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # spec/models/user_spec.rb
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
   describe 'FactoryBot' do
     it 'creates multiple users with different roles and unique usernames' do
-      create_users_with_roles([:role_0, :role_1, :role_2], 3)
+      create_users_with_roles(%i[role_0 role_1 role_2], 3)
 
       expect(User.where(role: 0).count).to eq(3)
       expect(User.where(role: 1).count).to eq(3)

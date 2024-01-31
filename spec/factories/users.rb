@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/factories/users.rb
 FactoryBot.define do
   factory :user do
@@ -15,7 +17,6 @@ FactoryBot.define do
     end
 
     trait :role_2 do
-
       role { 2 }
     end
   end
