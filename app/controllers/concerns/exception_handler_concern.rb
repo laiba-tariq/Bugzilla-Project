@@ -9,6 +9,7 @@ module ExceptionHandlerConcern
     rescue_from ActionController::InvalidAuthenticityToken, with: :handle_invalid_authenticity_token
     rescue_from ActionController::ParameterMissing, with: :handle_parameter_missing
     rescue_from ArgumentError, with: :handle_argument_error
+    rescue_from NoMethodError, with: :handle_no_method_error
   end
 
   private
@@ -35,6 +36,11 @@ module ExceptionHandlerConcern
 
   def handle_argument_error
     flash[:alert] = 'An argument error occurred.'
+    redirect_to root_path
+  end
+
+  def handle_no_method_error(exception)
+    flash[:alert] = "Caught a NoMethodError: #{exception.message}"
     redirect_to root_path
   end
 end

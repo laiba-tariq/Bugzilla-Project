@@ -5,6 +5,8 @@ class Project < ApplicationRecord
   has_many :users, through: :user_projects
   has_many :bugs, dependent: :destroy
 
+  validates :name, presence: true
+
   after_create :create_user_project
 
   private

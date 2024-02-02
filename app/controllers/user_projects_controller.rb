@@ -2,7 +2,9 @@
 
 # app/controllers/project_users_controller.rb
 class UserProjectsController < ApplicationController
-  before_action :set_project
+  include ExceptionHandlerConcern
+
+  before_action :project
 
   def new
     @user_project = UserProject.new
@@ -23,17 +25,23 @@ class UserProjectsController < ApplicationController
   end
 
   def destroy
-    @user_project = @project.user_projects.find_by(user_id: params[:id])
-    @user_project.destroy
+    @user_project = @project.user_projects.by_user_id(user_id: params[:id])
+
+    if @user_project
+      @user_project.destroy
+      flash[:notice] = 'User removed from project.'
+    else
+      flash[:alert] = 'User project not found.'
+    end
 
     respond_to do |format|
-      format.html { redirect_to projects_path, notice: 'User removed from project.' }
+      format.html { redirect_to projects_path }
     end
   end
 
   private
 
-  def set_project
+  def project
     @project = Project.find(params[:project_id])
   end
 

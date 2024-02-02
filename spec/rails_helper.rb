@@ -42,6 +42,8 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 RSpec.configure do |config|
+  config.include Pundit
+
   config.include Pundit::Matchers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.use_transactional_fixtures = true

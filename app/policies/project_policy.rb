@@ -12,6 +12,10 @@ class ProjectPolicy < ApplicationPolicy
     true
   end
 
+  def new?
+    @user.manager?
+  end
+
   def create?
     @user.manager?
   end

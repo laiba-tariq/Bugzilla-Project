@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 class BugsController < ApplicationController
+  include ExceptionHandlerConcern
+  include RenderProject
+
   before_action :authenticate_user!
-  before_action :set_bug, only: %i[edit update destroy]
+  before_action :bug, only: %i[edit update destroy]
   before_action :authorize_bug, except: %i[index]
 
   def index
@@ -20,20 +23,15 @@ class BugsController < ApplicationController
     authorize_bug
     @project = Project.find(params[:project_id])
     @bug = @project.bugs.build(status: :New)
-    puts "Project: #{@project.inspect}"
-    puts "Bug: #{@bug.inspect}"
   end
 
-  def create # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def create
     @bug = Bug.new(bug_params)
 
     @bug.creater_id = current_user.id
     if @bug.save
       @projects = policy_scope(Project)
-      render turbo_stream: [
-        turbo_stream.replace('project_frame', partial: 'projects/project', locals: { projects: @projects }),
-        turbo_stream.remove('project')
-      ]
+      render_project
       flash[:notice] = 'Bug was successfully created.'
     else
       respond_to do |format|
@@ -46,14 +44,15 @@ class BugsController < ApplicationController
   def edit; end
 
   def update
-    @bug.update(bug_params)
-    turbo_stream_info = {
-      replace_target: 'project_frame', # replace with the actual target ID
-      partial: 'bugs/bug', # replace with the actual template path
-      locals: { bug: @bug }
-    }
-    render_turbo_stream(turbo_stream_info) if turbo_stream_info.present?
-    flash[:notice] = 'Bug was successfully updated.'
+    @bug = Bug.find(params[:id])
+
+    if @bug.update(bug_params)
+      turbo_stream_info = { replace_target: 'project_frame', partial: 'bugs/bug', locals: { bug: @bug } }
+      render_turbo_stream(turbo_stream_info) if turbo_stream_info.present?
+      flash[:notice] = 'Bug was successfully updated.'
+    else
+      flash[:alert] = 'Failed to update the bug.'
+    end
   end
 
   def destroy
@@ -63,7 +62,7 @@ class BugsController < ApplicationController
 
   private
 
-  def set_bug
+  def bug
     @bug = Bug.find(params[:id])
   end
 
@@ -80,6 +79,13 @@ class BugsController < ApplicationController
       turbo_stream.remove(info[:remove_target])
     ]
   end
+
+  # def render_project
+  #   render turbo_stream: [
+  #     turbo_stream.replace("project_frame", partial: "projects/project", locals: { projects: @projects }),
+  #     turbo_stream.remove("project"),
+  #   ]
+  # end
 
   def authorize_bug
     authorize Bug
