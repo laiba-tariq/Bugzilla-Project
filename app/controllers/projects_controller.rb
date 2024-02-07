@@ -39,7 +39,7 @@ class ProjectsController < ApplicationController
     @project.created_by = current_user.id
     if @project.save
       @projects = policy_scope(Project)
-      render_project
+      update_page
       flash[:notice] = 'Project was successfully created.'
     else
       flash[:alert] = 'Project creation failed.'
@@ -53,23 +53,13 @@ class ProjectsController < ApplicationController
     if @project.update(project_params.except(:id))
       redirect_to project_path(@project), notice: 'Project was successfully updated.'
     else
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(@project, partial: 'projects/form', locals: { project: @project })
-        end
-        format.html { render 'edit' }
-      end
+      render 'edit'
     end
   end
 
   def destroy
-    if @project
-      @user_project.destroy
-      flash[:notice] = 'Project removed succesfully.'
-    else
-      redirect_to projects_path, notice: 'Project was not successfully destroyed.'
-      flash[:alert] = 'project not found.'
-    end
+    @project.destroy
+    redirect_to projects_path, notice: 'Project was successfully destroyed.'
   end
 
   private
@@ -86,10 +76,10 @@ class ProjectsController < ApplicationController
     authorize @projects
   end
 
-  # def update_page
-  #   render turbo_stream: [
-  #     turbo_stream.replace('project_frame', partial: 'project', locals: { projects: @projects }),
-  #     turbo_stream.remove('project')
-  #   ]
-  # end
+  def update_page
+    render turbo_stream: [
+      turbo_stream.replace('project_frame', partial: 'project', locals: { projects: @projects }),
+      turbo_stream.remove('project')
+    ]
+  end
 end

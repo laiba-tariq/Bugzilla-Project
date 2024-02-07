@@ -38,9 +38,4 @@ module ExceptionHandlerConcern
     flash[:alert] = 'An argument error occurred.'
     redirect_to root_path
   end
-
-  def handle_no_method_error(exception)
-    flash[:alert] = "Caught a NoMethodError: #{exception.message}"
-    redirect_to root_path
-  end
 end

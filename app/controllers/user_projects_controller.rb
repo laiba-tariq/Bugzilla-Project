@@ -35,7 +35,7 @@ class UserProjectsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to projects_path }
+      format.html { redirect_to projects_path, notice: 'User removed from project.' }
     end
   end
 

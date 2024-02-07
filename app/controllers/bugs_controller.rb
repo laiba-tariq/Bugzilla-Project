@@ -31,7 +31,10 @@ class BugsController < ApplicationController
     @bug.creater_id = current_user.id
     if @bug.save
       @projects = policy_scope(Project)
-      render_project
+      render turbo_stream: [
+        turbo_stream.replace('project_frame', partial: 'projects/project', locals: { projects: @projects }),
+        turbo_stream.remove('project')
+      ]
       flash[:notice] = 'Bug was successfully created.'
     else
       respond_to do |format|
@@ -44,15 +47,9 @@ class BugsController < ApplicationController
   def edit; end
 
   def update
-    @bug = Bug.find(params[:id])
-
-    if @bug.update(bug_params)
-      turbo_stream_info = { replace_target: 'project_frame', partial: 'bugs/bug', locals: { bug: @bug } }
-      render_turbo_stream(turbo_stream_info) if turbo_stream_info.present?
-      flash[:notice] = 'Bug was successfully updated.'
-    else
-      flash[:alert] = 'Failed to update the bug.'
-    end
+    @bug.update(bug_params)
+    render_turbo_stream(turbo_stream_info) if turbo_stream_info.present?
+    flash[:notice] = 'Bug was successfully updated.'
   end
 
   def destroy
@@ -75,17 +72,10 @@ class BugsController < ApplicationController
     return unless info.is_a?(Hash)
 
     render turbo_stream: [
-      turbo_stream.replace(info[:replace_target], partial: info[:partial], locals: info[:locals]),
+      turbo_stream.replace(info[:replace_target], template: info[:template], locals: info[:locals]),
       turbo_stream.remove(info[:remove_target])
     ]
   end
-
-  # def render_project
-  #   render turbo_stream: [
-  #     turbo_stream.replace("project_frame", partial: "projects/project", locals: { projects: @projects }),
-  #     turbo_stream.remove("project"),
-  #   ]
-  # end
 
   def authorize_bug
     authorize Bug
