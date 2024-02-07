@@ -22,7 +22,7 @@ class ProjectsController < ApplicationController
     if @project.save
       @projects = policy_scope(Project)
       update_page
-      flash[:notice] = "Project was successfully created."
+      flash[:notice] = 'Project was successfully created.'
     else
       render :new
     end
@@ -32,15 +32,15 @@ class ProjectsController < ApplicationController
 
   def update
     if @project.update(project_params.except(:id))
-      redirect_to project_path(@project), notice: "Project was successfully updated."
+      redirect_to project_path(@project), notice: 'Project was successfully updated.'
     else
-      render "edit"
+      render 'edit'
     end
   end
 
   def destroy
     @project.destroy
-    redirect_to projects_path, notice: "Project was successfully destroyed."
+    redirect_to projects_path, notice: 'Project was successfully destroyed.'
   end
 
   private
@@ -59,8 +59,8 @@ class ProjectsController < ApplicationController
 
   def update_page
     render turbo_stream: [
-      turbo_stream.replace("project_frame", partial: "project", locals: { projects: @projects }),
-      turbo_stream.remove("project"),
+      turbo_stream.replace('project_frame', partial: 'project', locals: { projects: @projects }),
+      turbo_stream.remove('project')
     ]
   end
 end

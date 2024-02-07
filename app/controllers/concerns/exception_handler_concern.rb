@@ -19,23 +19,22 @@ module ExceptionHandlerConcern
   end
 
   def record_not_found
-    flash[:alert] = "Record not found."
+    flash[:alert] = 'Record not found.'
     redirect_to root_path
   end
 
   def handle_invalid_authenticity_token
-    flash[:alert] = "Invalid authenticity token."
+    flash[:alert] = 'Invalid authenticity token.'
     redirect_to root_path
   end
 
   def handle_parameter_missing
-    flash[:alert] = "Required parameter is missing."
+    flash[:alert] = 'Required parameter is missing.'
     redirect_to root_path
   end
 
   def handle_argument_error
-    flash[:alert] = "An argument error occurred."
+    flash[:alert] = 'An argument error occurred.'
     redirect_to root_path
   end
-
 end

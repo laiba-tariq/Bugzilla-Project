@@ -7,7 +7,7 @@ class UserProjectsController < ApplicationController
   def new
     @user_project = UserProject.new
     @users = User.where(role: %w[developer qa])
-    @remaining_users = @users.reject { |user| user.manager? } - @project.users
+    @remaining_users = @users.reject(&:manager?) - @project.users
   end
 
   def create
@@ -15,7 +15,7 @@ class UserProjectsController < ApplicationController
 
     respond_to do |format|
       if @user_project.save
-        format.html { redirect_to projects_path, notice: "User added to project." }
+        format.html { redirect_to projects_path, notice: 'User added to project.' }
       else
         format.html { render :new }
       end
@@ -27,7 +27,7 @@ class UserProjectsController < ApplicationController
     @user_project.destroy
 
     respond_to do |format|
-      format.html { redirect_to projects_path, notice: "User removed from project." }
+      format.html { redirect_to projects_path, notice: 'User removed from project.' }
     end
   end
 
