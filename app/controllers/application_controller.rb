@@ -14,4 +14,8 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_in, keys: [:role])
     devise_parameter_sanitizer.permit(:account_update, keys: %i[username role])
   end
+  
+  def after_sign_up_path_for(_resource)
+    projects_path
+  end
 end

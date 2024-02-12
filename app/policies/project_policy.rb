@@ -16,18 +16,14 @@ class ProjectPolicy < ApplicationPolicy
     @user.manager?
   end
 
-  def create?
-    @user.manager?
-  end
-
   def show?
     @project.created_by == @user.id if @project.present?
   end
 
+  alias create? new?
   alias update? show?
   alias destroy? show?
-  alias add_user? show?
-  alias remove_user? show?
+
   class Scope < Scope
     def resolve
       case @user&.role&.to_sym
