@@ -20,11 +20,5 @@ class Bug < ApplicationRecord
 
   scope :by_project, ->(project_id) { where(project_id: project_id) }
 
-  #   def screenshot_type
-  #     return unless screenshot.attached?
 
-  #     return if VALID_EXTENSIONS.include?(File.extname(screenshot.filename.to_s).downcase)
-
-  #     errors.add(:screenshot, "only supports .png or .gif")
-  #   end
 end

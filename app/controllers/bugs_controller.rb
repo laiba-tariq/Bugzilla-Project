@@ -4,23 +4,23 @@ class BugsController < ApplicationController
   include ExceptionHandlerConcern
   include RenderPage
 
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   before_action :bug, only: %i[edit update destroy]
-  before_action :authorize_bug, except: %i[index]
+  # before_action :authorize_bug, except: %i[index]
 
   def index
-    @bugs = policy_scope(Bug)
+    # @bugs = policy_scope(Bug)
     @bugs = Bug.by_project(params[:project_id])
   end
 
   def show
     @project_id = params[:project_id]
     @bugs = Bug.by_project(params[:project_id])
-    authorize @bugs
+    # authorize @bugs
   end
 
   def new
-    authorize_bug
+    # authorize_bug
     @project = Project.find(params[:project_id])
     @bug = @project.bugs.build(status: :New)
   end
@@ -82,7 +82,7 @@ class BugsController < ApplicationController
     ]
   end
 
-  def authorize_bug
-    authorize Bug
-  end
+  # def authorize_bug
+  #   authorize Bug
+  # end
 end

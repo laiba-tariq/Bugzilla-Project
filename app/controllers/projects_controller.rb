@@ -8,13 +8,15 @@ class ProjectsController < ApplicationController
   before_action :project, only: %i[edit update destroy show]
 
   def index
-    @pagy, @projects = pagy(policy_scope(Project.order(:id)))
-    authorize_project
+    # @pagy, @projects = pagy(policy_scope(Project.order(:id)))
+    @projects = Project.order(:id)
+
+    # authorize_project
   end
 
   def show
     if @project
-      authorize @project
+      # authorize @project
       render :show
     else
       flash[:alert] = 'Record not found.'
@@ -24,7 +26,7 @@ class ProjectsController < ApplicationController
 
   def new
     @project = Project.new
-    authorize @project
+    # authorize @project
 
     return if current_user.manager?
 
@@ -34,7 +36,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = Project.new(project_params)
-    authorize @project
+    # authorize @project
     @project.created_by = current_user.id
     if @project.save
       @projects = policy_scope(Project)
