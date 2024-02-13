@@ -30,7 +30,7 @@ class BugsController < ApplicationController
 
     @bug.creater_id = current_user.id
     if @bug.save
-      @projects = policy_scope(Project)
+      # ra@projects = policy_scope(Project)
       render_project
 
       flash[:notice] = 'Bug was successfully created.'

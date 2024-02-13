@@ -19,6 +19,4 @@ class Bug < ApplicationRecord
   validates :title, :bug_type, :status, presence: true
 
   scope :by_project, ->(project_id) { where(project_id: project_id) }
-
-
 end
