@@ -9,7 +9,12 @@ class UserProjectsController < ApplicationController
   def new
     @user_project = UserProject.new
     @users = User.where(role: %w[developer qa])
-    @remaining_users = @users.reject(&:manager?) - @project.users
+    @remaining_users = User
+                       .joins('LEFT JOIN user_projects ON users.id = user_projects.user_id')
+                       .where.not(role: User.roles[:manager])
+                       .where('user_projects.project_id IS NULL OR user_projects.project_id != ?', @project.id)
+                       .where.not(id: @project.users.select(:id))
+                       .distinct
   end
 
   def create
@@ -25,10 +30,10 @@ class UserProjectsController < ApplicationController
   end
 
   def destroy
-    @user_project = @project.user_projects.by_user_id(user_id: params[:id])
-
+    @user_project = @project.user_projects.projects(id: params[:id])
     if @user_project
       @user_project.destroy
+
       flash[:notice] = 'User removed from project.'
     else
       flash[:alert] = 'User project not found.'

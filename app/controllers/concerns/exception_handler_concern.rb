@@ -38,4 +38,8 @@ module ExceptionHandlerConcern
     flash[:alert] = 'An argument error occurred.'
     redirect_to root_path
   end
+  def handle_no_method_error
+    flash[:alert] = 'No method found'
+    redirect_to root_path
+  end
 end

@@ -11,10 +11,6 @@
   <body class="background">
     <%= render "shared/navbar" %>
     <%= yield %>
-    <% flash.each do |key, value| %>
-      <div class="flash <%= key %> bg-secondary">
-        <h3><%= value %></h3>
-      </div>
-    <% end %>
+   
   </body>
 </html>

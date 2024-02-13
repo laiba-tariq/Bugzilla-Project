@@ -2,25 +2,25 @@
 
 class BugsController < ApplicationController
   include ExceptionHandlerConcern
-  include RenderProject
+  include RenderPage
 
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
   before_action :bug, only: %i[edit update destroy]
-  before_action :authorize_bug, except: %i[index]
+  # before_action :authorize_bug, except: %i[index]
 
   def index
-    @bugs = policy_scope(Bug)
+    # @bugs = policy_scope(Bug)
     @bugs = Bug.by_project(params[:project_id])
   end
 
   def show
     @project_id = params[:project_id]
     @bugs = Bug.by_project(params[:project_id])
-    authorize @bugs
+    # authorize @bugs
   end
 
   def new
-    authorize_bug
+    # authorize_bug
     @project = Project.find(params[:project_id])
     @bug = @project.bugs.build(status: :New)
   end
@@ -30,11 +30,9 @@ class BugsController < ApplicationController
 
     @bug.creater_id = current_user.id
     if @bug.save
-      @projects = policy_scope(Project)
-      render turbo_stream: [
-        turbo_stream.replace('project_frame', partial: 'projects/project', locals: { projects: @projects }),
-        turbo_stream.remove('project')
-      ]
+      # ra@projects = policy_scope(Project)
+      render_project
+
       flash[:notice] = 'Bug was successfully created.'
     else
       respond_to do |format|
@@ -47,9 +45,16 @@ class BugsController < ApplicationController
   def edit; end
 
   def update
-    @bug.update(bug_params)
-    render_turbo_stream(turbo_stream_info) if turbo_stream_info.present?
-    flash[:notice] = 'Bug was successfully updated.'
+    @bug = Bug.find(params[:id])
+
+    if @bug.update(bug_params)
+      turbo_stream_info = { replace_target: 'project_frame', partial: 'bugs/bug', locals: { bug: @bug } }
+      render_turbo_stream(turbo_stream_info) if turbo_stream_info.present?
+
+      flash[:notice] = 'Bug was successfully updated.'
+    else
+      flash[:alert] = 'Failed to update the bug.'
+    end
   end
 
   def destroy
@@ -77,7 +82,7 @@ class BugsController < ApplicationController
     ]
   end
 
-  def authorize_bug
-    authorize Bug
-  end
+  # def authorize_bug
+  #   authorize Bug
+  # end
 end
