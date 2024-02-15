@@ -38,6 +38,7 @@ gem 'sprockets', '>= 3.7.2'
 
 gem 'sassc-rails', '>= 2.1.2'
 # gem "therubyracer", "0.12.3"
+gem 'active_model_serializers'
 gem 'activestorage'
 gem 'active_storage_validations'
 gem 'devise'
@@ -45,7 +46,6 @@ gem 'execjs'
 gem 'pagy'
 gem 'pundit'
 gem 'rack-cors'
-gem 'active_model_serializers'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mswin mswin64 mingw x64_mingw jruby]

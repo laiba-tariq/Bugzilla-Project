@@ -9,8 +9,6 @@ class ProjectsController < ApplicationController
 
   def index
     @pagy, @projects = pagy(policy_scope(Project.order(:id)))
-    # @projects = Project.order(:id)
-
     authorize_project
   end
 
