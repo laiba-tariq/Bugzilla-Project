@@ -9,21 +9,16 @@ class BugPolicy < ApplicationPolicy
     user.qa?
   end
 
-  def create?
-    @user.qa?
-  end
-
   def show?
     @user.developer? && (@user.projects.ids.include? @record.project_id)
-  end
-
-  def edit?
-    user.qa?
   end
 
   def update?
     user.developer?
   end
+
+  alias edit? new?
+  alias create? new?
 
   class Scope < Scope
     def resolve

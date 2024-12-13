@@ -117,8 +117,7 @@ RSpec.describe ProjectsController, type: :controller do
     end
     it 'renders the edit template when update fails' do
       sign_in(manager_user)
-      project_attributes = attribu
-      tes_for(:project, name: nil)
+      project_attributes = attributes_for(:project, name: nil)
       put :update, params: { id: project.id, project: project_attributes }
       expect(response).to render_template(:edit)
       expect(assigns(:project).errors[:name]).to include("can't be blank")

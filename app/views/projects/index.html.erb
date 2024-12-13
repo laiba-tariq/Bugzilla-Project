@@ -1,6 +1,6 @@
 <%= turbo_frame_tag "project" %>
 <% if current_user.manager? %>
-  <%= turbo_frame_tag "main_turbo_frame" do %>
+  <%= turbo_frame_tag "project_frame" do %>
     <div class="container mx-auto mt-4">
       <div class="col-lg-4 col-form-label">
         <%= link_to "Add Project", new_project_path, class: "btn btn-new-project", data: { turbo_frame: "project" } %>
@@ -13,5 +13,4 @@
     <h1 class="text-black bg-bold">Projects</h1>
     <%= render 'project', local: { projects: @projects } %>
   <% end %>
-
 </div>

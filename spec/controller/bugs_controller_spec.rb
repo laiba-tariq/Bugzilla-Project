@@ -38,7 +38,6 @@ RSpec.describe BugsController, type: :controller do # rubocop:disable Metrics/Bl
         expect(response).to be_successful
         expect(response.body).to include('<turbo-stream')
         expect(assigns(:bug)).to be_present, 'Bug was not created successfully'
-
         expect(Bug.count).to eq(1)
         expect(project.bugs.count).to eq(1)
         expect(assigns(:bug).project).to eq(project)

@@ -2,7 +2,7 @@
 
 class ProjectsController < ApplicationController
   include ExceptionHandlerConcern
-  include RenderProject
+  include RenderPage
 
   before_action :authenticate_user!
   before_action :project, only: %i[edit update destroy show]
@@ -30,7 +30,6 @@ class ProjectsController < ApplicationController
 
     flash[:alert] = "You don't have permission to perform this action."
     redirect_to root_path
-    nil
   end
 
   def create
@@ -39,10 +38,12 @@ class ProjectsController < ApplicationController
     @project.created_by = current_user.id
     if @project.save
       @projects = policy_scope(Project)
-      update_page
+      render_project
+
       flash[:notice] = 'Project was successfully created.'
     else
       flash[:alert] = 'Project creation failed.'
+
       render :new
     end
   end
@@ -58,8 +59,15 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    @project.destroy
-    redirect_to projects_path, notice: 'Project was successfully destroyed.'
+    if @project
+      @project.destroy
+
+      flash[:notice] = 'Project removed succesfully.'
+    else
+      redirect_to projects_path, notice: 'Project was not successfully destroyed.'
+
+      flash[:alert] = 'project not found.'
+    end
   end
 
   private
@@ -74,12 +82,5 @@ class ProjectsController < ApplicationController
 
   def authorize_project
     authorize @projects
-  end
-
-  def update_page
-    render turbo_stream: [
-      turbo_stream.replace('project_frame', partial: 'project', locals: { projects: @projects }),
-      turbo_stream.remove('project')
-    ]
   end
 end

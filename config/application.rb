@@ -19,6 +19,7 @@ module BugzillaProject
     config.autoload_lib(ignore: %w[assets tasks])
     config.assets.css_compressor = nil
     config.assets.js_runtime = :node
+
     # config.eager_load_paths += Dir[Rails.root.join('app', 'controllers', '{**/}')]
     # Configuration for the application, engines, and railties goes here.
     #
